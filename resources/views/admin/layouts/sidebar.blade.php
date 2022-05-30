@@ -197,19 +197,18 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="{{ route('manage-agent') }}" class="nav-link {{ request()->is('manage-agent') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Manage Agent
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('manage-airwaybill') }}" class="nav-link {{ request()->is('manage-airwaybill') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage Airwaybill
               </p>
             </a>
           </li>

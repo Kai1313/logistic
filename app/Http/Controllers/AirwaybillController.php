@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airwaybill;
+use App\Models\Pricelist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use DataTables;
+use DB;
 
 class AirwaybillController extends Controller
 {
@@ -24,7 +28,9 @@ class AirwaybillController extends Controller
      */
     public function create()
     {
-        //
+        $pricelists = Pricelist::latest()->get();
+        return view('admin/createAirwaybill')
+                ->with('pricelists', $pricelists);
     }
 
     /**
@@ -81,5 +87,19 @@ class AirwaybillController extends Controller
     public function destroy(Airwaybill $airwaybill)
     {
         //
+    }
+
+    public function airwaybillData(Request $request)
+    {
+        // dd($request->all());
+        $airwaybill = Airwaybill::orderBy('created_at', 'desc')->get();
+        $airwaybill = DataTables::of($airwaybill)
+                    ->addColumn('action', function($row){
+                        $btn = '<a href="admin/manageAirwaybill/edit/'.$row["awb_id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        return $airwaybill;
     }
 }

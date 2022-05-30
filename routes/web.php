@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PricelistController;
+use App\Http\Controllers\AirwaybillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ Route::get('/', function () {
 Route::get('/manage-pricelist', function () {
     return view('admin/managePricelist');
 })->name('manage-pricelist');
+Route::get('/manage-airwaybill', function () {
+    return view('admin/manageAirwaybill');
+})->name('manage-airwaybill');
 Route::get('/manage-agent', function () {
     return view('admin/manageAgent');
 })->name('manage-agent');
@@ -39,6 +43,11 @@ Route::get('admin/managePricelist/edit/{id}', [PricelistController::class, 'edit
 )->name('edit-pricelist/{id}');
 Route::post('admin/managePricelist/update', [PricelistController::class, 'update']
 )->name('update-pricelist');
+
+Route::get('/airwaybill-data', [AirwaybillController::class, 'airwaybillData']
+)->name('airwaybill-data');
+Route::get('admin/manageAirwaybill/create', [AirwaybillController::class, 'create']
+)->name('create-airwaybill');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
