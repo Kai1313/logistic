@@ -43,11 +43,15 @@ Route::get('admin/managePricelist/edit/{id}', [PricelistController::class, 'edit
 )->name('edit-pricelist/{id}');
 Route::post('admin/managePricelist/update', [PricelistController::class, 'update']
 )->name('update-pricelist');
+Route::post('admin/managePricelist/fetch', [PricelistController::class, 'fetch']
+)->name('fetch-pricelist');
 
 Route::get('/airwaybill-data', [AirwaybillController::class, 'airwaybillData']
 )->name('airwaybill-data');
 Route::get('admin/manageAirwaybill/create', [AirwaybillController::class, 'create']
 )->name('create-airwaybill');
+Route::post('admin/manageAirwaybill/store', [AirwaybillController::class, 'store']
+)->name('store-airwaybill');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

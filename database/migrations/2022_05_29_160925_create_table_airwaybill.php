@@ -28,9 +28,9 @@ return new class extends Migration
             $table->decimal('awb_width', $precision = 10, $scale = 2)->default(0);
             $table->decimal('awb_height', $precision = 10, $scale = 2)->default(0);
             $table->decimal('awb_volume', $precision = 10, $scale = 2)->default(0);
-            $table->integer('awb_package')->default(0);
+            $table->integer('awb_packaging')->default(0);
             $table->decimal('awb_cost', $precision = 10, $scale = 2)->default(0);
-            $table->decimal('awb_package_cost', $precision = 10, $scale = 2)->default(0);
+            $table->decimal('awb_packaging_cost', $precision = 10, $scale = 2)->default(0);
             $table->decimal('awb_additional_cost', $precision = 10, $scale = 2)->default(0);
             $table->decimal('awb_insurance_cost', $precision = 10, $scale = 2)->default(0);
             $table->decimal('awb_discount', $precision = 10, $scale = 2)->default(0);

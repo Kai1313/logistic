@@ -178,10 +178,21 @@ class PricelistController extends Controller
         // return response()->json(["dataTable"=>$pricelist]);
     }
 
+    public function fetch(Request $request)
+    {
+        try {
+            $pricelist = Pricelist::find($request->ids);
+            return response()->json(["result"=>TRUE, "message"=>"Successfully fetched regencies data", "pricelist"=>$pricelist]);
+        } 
+        catch (\Exception $e) {
+            return response()->json(["result"=>FALSE, "message"=>"Failed to fetch pricelist data", "exception"=>$e]);
+        }
+    }
+
     public function getRegencies(Request $request)
     {
         try {
-            $regencies = Regency::where('province_id', $request->que)->orderBy('name')->get();
+            $regencies = Regency::where('province_id', $request->ids)->orderBy('name')->get();
             return response()->json(["result"=>TRUE, "message"=>"Successfully fetched regencies data", "data"=>$regencies]);
         } 
         catch (\Exception $e) {
