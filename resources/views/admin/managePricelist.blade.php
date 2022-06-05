@@ -99,7 +99,7 @@
             "autoWidth": true,
             "processing": true,
             "serverSide": true,
-            "ajax": "{{ route('test-pricelist') }}",
+            "ajax": "{{ route('pricelist-data') }}",
             "columns": [
                 {data: 'pricelist_code', name: 'pricelist_code'},
                 {data: 'province', name: 'province'},

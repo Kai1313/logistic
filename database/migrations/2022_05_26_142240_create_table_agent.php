@@ -18,9 +18,9 @@ return new class extends Migration
             $table->char('agent_code', 36)->unique();
             $table->string('agent_name', 128);
             $table->string('province', 128);
-            $table->string('city', 128);
+            $table->string('regency', 128);
             $table->string('district', 128)->nullable();
-            $table->string('subdistrict', 128)->nullable();
+            $table->string('village', 128)->nullable();
             $table->text('agent_description')->nullable();
             $table->text('agent_address')->nullable();
             $table->char('agent_phone', 36);

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Agent extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'agent_id';
+    protected $keyType = 'string';
 }

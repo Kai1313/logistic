@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PricelistController;
 use App\Http\Controllers\AirwaybillController;
+use App\Http\Controllers\AgentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,8 @@ Route::get('/manage-airwaybill', function () {
 Route::get('/manage-agent', function () {
     return view('admin/manageAgent');
 })->name('manage-agent');
-Route::get('/test-pricelist', [PricelistController::class, 'pricelistData']
-)->name('test-pricelist');
+Route::get('/pricelist-data', [PricelistController::class, 'pricelistData']
+)->name('pricelist-data');
 Route::get('admin/managePricelist/create', [PricelistController::class, 'create']
 )->name('create-pricelist');
 Route::get('admin/managePricelist/getRegencies', [PricelistController::class, 'getRegencies']
@@ -54,6 +55,13 @@ Route::post('admin/manageAirwaybill/store', [AirwaybillController::class, 'store
 )->name('store-airwaybill');
 Route::get('admin/manageAirwaybill/print/{ids}', [AirwaybillController::class, 'print']
 )->name('print-airwaybill');
+
+Route::get('/agent-data', [AgentController::class, 'agentData']
+)->name('agent-data');
+Route::get('admin/manageAgent/create', [AgentController::class, 'create']
+)->name('create-agent');
+Route::post('admin/manageAgent/store', [AgentController::class, 'store']
+)->name('store-agent');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
