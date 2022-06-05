@@ -41,7 +41,7 @@ class AirwaybillController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         try {
             $airwaybill = new Airwaybill;
             $airwaybill->awb_id = Str::uuid();
@@ -152,5 +152,10 @@ class AirwaybillController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         return $airwaybill;
+    }
+
+    public function print(Request $request)
+    {
+        return view('admin/printAirwaybill');
     }
 }

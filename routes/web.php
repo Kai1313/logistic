@@ -52,6 +52,8 @@ Route::get('admin/manageAirwaybill/create', [AirwaybillController::class, 'creat
 )->name('create-airwaybill');
 Route::post('admin/manageAirwaybill/store', [AirwaybillController::class, 'store']
 )->name('store-airwaybill');
+Route::get('admin/manageAirwaybill/print/{ids}', [AirwaybillController::class, 'print']
+)->name('print-airwaybill');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -16,6 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   @yield('addon-css')
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/lte/dist/css/adminlte.min.css') }}">
+  @yield('onpage-css')
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">

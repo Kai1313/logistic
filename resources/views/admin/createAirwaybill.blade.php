@@ -3,6 +3,15 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets/lte/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('assets/lte/plugins/sweetalert2/sweetalert2.css') }}">
+@endsection
+@section('onpage-css')
+    <style>
+        .capitalized {
+            text-transform: capitalize;
+        }
+    </style>
 @endsection
 @section('main-content')
 <div class="content-wrapper">
@@ -38,11 +47,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <span class="h2 mr-2" id="showType">REG</span>
-                                        <span class="h4" id="showDestination">SMA 17 Agustus</span>
-                                        <span class="h4" id="showVillage">Desa Setail</span>
-                                        <span class="h4" id="show District">Genteng</span>
-                                        <span class="h4" id="showRegency">Banyuwangi</span>
-                                        <span class="h4" id="showProvince">Jawa Timur</span>
+                                        <span class="h4" id="showDestination" class="capitalized">SMA 17 Agustus</span>
+                                        <span class="h4" id="showVillage" class="capitalized">Desa Setail</span>
+                                        <span class="h4" id="showDistrict" class="capitalized">Genteng</span>
+                                        <span class="h4" id="showRegency" class="capitalized">Banyuwangi</span>
+                                        <span class="h4" id="showProvince" class="capitalized">Jawa Timur</span>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="">Dimension and Weight</label>
@@ -61,8 +70,14 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="">Cost/kg</label>
+                                            <label for="">Min. Cost</label>
                                             <h3 for="" id="showCost">Rp5000</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Min. Weight</label>
+                                            <h3 for="" id="showMinimumWeight">1kg</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -89,14 +104,14 @@
                                             <h3 for="" id="showPackagingCost">Rp5000</h3>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Discount</label>
                                             <h3 for="" id="showDiscountCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Total</label>
@@ -147,9 +162,25 @@
                                             <input type="text" name="packagingCost" class="form-control" id="packagingCost" placeholder="Package Cost">
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Weight Type</label>
+                                            <select name="weightType" id="weightType" class="form-control select2bs4" style="width: 100%;">
+                                                <option value="0">Normal</option>
+                                                <option value="1">Cargo</option>
+                                                <option value="2">EMKL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="hidden" name="hiddenPricelist" id="hiddenPricelist" value="0">
+                                            <input type="hidden" name="hiddenSpecialPricelist" id="hiddenSpecialPricelist" value="0">
+                                            <input type="hidden" name="hiddenMinimumWeight" id="hiddenMinimumWeight" value="0">
+                                            <input type="hidden" name="hiddenSubCost" id="hiddenSubCost" value="0">
+                                            <input type="hidden" name="hiddenTotalCost" id="hiddenTotalCost" value="0">
                                             <label for="">Pricelist</label>
                                             <select name="pricelist" id="pricelist" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="">Pick a price</option>
@@ -159,14 +190,20 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Promotion Code</label>
                                             <input type="text" name="promo_code" class="form-control" id="" placeholder="Promotion Code">
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Discount</label>
+                                            <input type="text" name="discount" class="form-control" id="discount" placeholder="Additional Cost">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Insurance Cost</label>
@@ -177,12 +214,6 @@
                                         <div class="form-group">
                                             <label for="">Additional Cost</label>
                                             <input type="text" name="additional" class="form-control" id="additional" placeholder="Additional Cost">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="">Discount</label>
-                                            <input type="text" name="discount" class="form-control" id="discount" placeholder="Additional Cost">
                                         </div>
                                     </div>
                                 </div>
@@ -289,8 +320,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="card-footer float-right">
+                                <button id="btn-print" class="btn btn-outline-success float-right" disabled><i class="fas fa-print"></i> Print</button>
+                                <button type="submit" class="btn btn-primary float-right mr-1">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -298,7 +330,7 @@
             </form>
         </div>
     </section>
-  </div>
+</div>
 @endsection
 @section('addon-js')
     <!-- Select2 -->
@@ -306,6 +338,8 @@
     <!-- jquery-validation -->
     <script src="{{ asset('assets/lte/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/lte/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('assets/lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 @endsection
 @section('script-js')
 <script>
@@ -316,17 +350,16 @@
 
         // Dimension change
         $("#weight").change(function() {
-            dimensionSum()
             costSum()
         })
         $("#length").change(function() {
-            dimensionSum()
+            costSum()
         })
         $("#width").change(function() {
-            dimensionSum()
+            costSum()
         })
         $("#height").change(function() {
-            dimensionSum()
+            costSum()
         })
 
         // Packaging change
@@ -337,6 +370,9 @@
 
         // Cost change
         $("#packagingCost").change(function() {
+            costSum()
+        })
+        $("#weightType").on('change', function() {
             costSum()
         })
         $("#pricelist").on('change', function() {
@@ -424,74 +460,139 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    alert(data.message)
+                    Swal.fire(
+                        'Good job!',
+                        data.message,
+                        'success'
+                    )
+                    // alert(data.message)
                 }
                 else {
-                    alert(data.message)
+                    Swal.fire(
+                        'Ooopss!',
+                        data.message,
+                        'error'
+                    )
                 }
+            },
+            error: function() {
+                Swal.fire(
+                    'Oooopsss!',
+                    'Something goes wrong!',
+                    'error'
+                )
             }
         })
     }
 
     function costSum() {
+        // Init value
+        let vol = 0
+        let volume = 0
+        let round = 0
+        let pckage = 0
+        let sum = 0
         let weight = ($("#weight").val() == "") ? parseFloat(1) : parseFloat($("#weight").val())
+        let minWeight = $("#hiddenMinimumWeight").val()
+        let specialPrice = $("#hiddenSpecialPricelist").val()
+        let weightType = $("#weightType").val()
+        let length = ($("#length").val() == "") ? parseFloat(1) : parseFloat($("#length").val())
+        let width = ($("#width").val() == "") ? parseFloat(1) : parseFloat($("#width").val())
+        let height = ($("#height").val() == "") ? parseFloat(1) : parseFloat($("#height").val())
         let packaging = ($("#packagingCost").val() == "") ? parseFloat(0) : parseFloat($("#packagingCost").val())
         let insurance = ($("#insurance").val() == "") ? parseFloat(0) : parseFloat($("#insurance").val())
         let additional = ($("#additional").val() == "") ? parseFloat(0) : parseFloat($("#additional").val())
         let pricelist = ($("#pricelist").val() == "") ? parseFloat(0) : parseFloat($("#hiddenPricelist").val())
-        let package = weight*pricelist
         let discount = ($("#discount").val() == "") ? parseFloat(0) : parseFloat($("#discount").val())
-        let sum = packaging+insurance+additional+package-discount
-        $("#showCost").text('Rp'+pricelist)
-        $("#showPackageCost").text('Rp'+package)
+
+        // Check weighing type
+        switch (weightType) {
+            case '1':
+                let finWeight = (minWeight > weight) ? minWeight : weight
+                let minPrice = finWeight*pricelist
+                vol = length*width*height
+                volume = parseFloat(vol/4000)
+                round = rounding(volume)
+                pckage = (volume > finWeight) ? (round-minWeight)*pricelist+minPrice : (finWeight-minWeight)*pricelist+minPrice
+                sum = packaging+insurance+additional+pckage-discount
+                $("#hiddenSubCost").val(pckage)
+                $("#hiddenTotalCost").val(sum)
+                $("#showWeight").text((volume > finWeight)?round+'kg':finWeight+'kg')
+                $("#showMinimumWeight").html(minWeight+'kg')
+                $("#showCost").text('Rp'+pricelist)
+                $("#showPackageCost").text('Rp'+pckage)
+                break;
+            case '2':
+                vol = length*width*height
+                volume = (parseFloat(vol/1000000) < 1) ? parseFloat(1) : parseFloat(vol/1000000)
+                pckage = volume*specialPrice
+                sum = packaging+insurance+additional+pckage-discount
+                $("#hiddenSubCost").val(pckage)
+                $("#hiddenTotalCost").val(sum)
+                $("#showWeight").html(volume+'m<sup>3</sup>')
+                $("#showMinimumWeight").html(volume+'m<sup>3</sup>')
+                $("#showCost").text('Rp'+specialPrice)
+                $("#showPackageCost").text('Rp'+pckage)
+                break;
+            default:
+                vol = length*width*height
+                volume = parseFloat(vol/4000)
+                round = rounding(volume)
+                pckage = (volume > weight) ? volume*pricelist : weight*pricelist
+                sum = packaging+insurance+additional+pckage-discount
+                $("#hiddenSubCost").val(pckage)
+                $("#hiddenTotalCost").val(sum)
+                $("#showWeight").text((volume > weight)?round+'kg':weight+'kg')
+                $("#showMinimumWeight").html('1kg')
+                $("#showCost").text('Rp'+pricelist)
+                $("#showPackageCost").text('Rp'+pckage)
+                break;
+        }
+        $("#showLength").text(length+'cm')
+        $("#showWidth").text(width+'cm')
+        $("#showHeight").text(height+'cm')
         $("#showPackagingCost").text('Rp'+packaging)
         $("#showInsuranceCost").text('Rp'+insurance)
         $("#showAdditionalCost").text('Rp'+additional)
         $("#showDiscountCost").text('Rp'+discount)
         $("#showTotalCost").text('Rp'+sum)
-        console.log('hitung cost')
-    }
-    
-    function dimensionSum() {
-        let weight = ($("#weight").val() == "") ? parseFloat(1) : parseFloat($("#weight").val())
-        let length = ($("#length").val() == "") ? parseFloat(1) : parseFloat($("#length").val())
-        let width = ($("#width").val() == "") ? parseFloat(1) : parseFloat($("#width").val())
-        let height = ($("#height").val() == "") ? parseFloat(1) : parseFloat($("#height").val())
-        let sum = length*width*height
-        let volume = parseFloat(sum/4000)
-        $("#showLength").text(length+'cm')
-        $("#showWidth").text(width+'cm')
-        $("#showHeight").text(height+'cm')
-        let round = rounding(volume)
-        if (volume > weight) {
-            $("#showWeight").text(round+'kg')
-        }
-        else {
-            $("#showWeight").text(weight+'kg')
-        }
-        console.log('hitung dimensi')
+        console.log('Cost Summary')
     }
 
     function rounding(input) {
       let inp = input
       let prc = (inp*10)%10
       let res = (prc >= 3) ? inp+(10-prc) * .1 : inp.toFixed()
-      console.log(res)
       return res
     }
 
-    function fetchPricelist(ids) {
-        // console.log($("#hiddenPricelist").val())
+    function fetchPricelist(ids, type) {
+        let weight = ($("#weight").val() == "") ? parseFloat(1) : parseFloat($("#weight").val())
         let res = 0
         $.ajax({
             url: "{{ route('fetch-pricelist') }}",
             type: "POSt",
             data: {_token: "{{ csrf_token() }}", ids: ids},
             success: function (data) {
-                res = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price"]) : parseFloat(0)
-                // console.log('ini disini'+res)
-                $("#hiddenPricelist").val(res)
-                // console.log($("#hiddenPricelist").val())
+                price = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price"]) : parseFloat(0)
+                specialPrice = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price_volume"]) : parseFloat(0)
+                let minWeight = parseFloat(data.pricelist["pricelist_minimum_weight"])
+                if (minWeight > weight) {
+                    price = price*minWeight
+                }
+                $("#hiddenPricelist").val(price)
+                $("#hiddenSpecialPricelist").val(specialPrice)
+                $("#hiddenMinimumWeight").val(minWeight)
+
+                // Set pricelist info
+                $("#showType").text(data.pricelist["pricelist_type"])
+                $("#showDestination").text(data.pricelist["pricelist_destination"])
+                $("#showVillage").text(data.pricelist["village_name"])
+                $("#showDistrict").text(data.pricelist["district_name"])
+                $("#showRegency").text(data.pricelist["regency_name"])
+                $("#showProvince").text(data.pricelist["province_name"])
+
+                // Recalculate
                 costSum()
             }
         })      

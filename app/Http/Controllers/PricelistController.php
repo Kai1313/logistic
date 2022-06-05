@@ -181,7 +181,12 @@ class PricelistController extends Controller
     public function fetch(Request $request)
     {
         try {
-            $pricelist = Pricelist::find($request->ids);
+            $pricelist = Pricelist::select('pricelists.*', 'provinces.name as province_name', 'regencies.name as regency_name', 'districts.name as district_name', 'villages.name as village_name')->where('pricelist_id', $request->ids)
+            ->join('provinces', 'pricelists.province', '=', 'provinces.id')
+            ->join('regencies', 'pricelists.regency', '=', 'regencies.id')
+            ->join('districts', 'pricelists.district', '=', 'districts.id')
+            ->join('villages', 'pricelists.village', '=', 'villages.id')
+            ->first();
             return response()->json(["result"=>TRUE, "message"=>"Successfully fetched regencies data", "pricelist"=>$pricelist]);
         } 
         catch (\Exception $e) {
