@@ -41,7 +41,7 @@ class AirwaybillController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         try {
             $airwaybill = new Airwaybill;
             $airwaybill->awb_id = Str::uuid();

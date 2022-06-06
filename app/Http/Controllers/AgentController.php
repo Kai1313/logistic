@@ -50,7 +50,36 @@ class AgentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        try {
+            $agent = new Agent;
+            $agent->agent_id = Str::uuid();
+            $agent->agent_name = $request->name;
+            $agent->province = $request->province;
+            $agent->regency = $request->regency;
+            $agent->district = $request->district;
+            $agent->village = $request->village;
+            $agent->agent_description = $request->note;
+            $agent->agent_address = $request->address;
+            $agent->agent_phone = $request->phone;
+            $agent->agent_email = $request->email;
+            $agent->agent_code = $this->generateUniqueCode();
+            if (!$agent->save()) {
+                return response()->json(["result"=>FALSE, "message"=>"Failed to store agent data"]);
+            }
+            return response()->json(["result"=>TRUE, "message"=>"Successfully store agent data", "agent"=>$agent]);
+        } 
+        catch (\Exception $e) {
+            return response()->json(["result"=>FALSE, "message"=>"Failed to store agent data", "exception"=>$e]);
+        }
+    }
+
+    public function generateUniqueCode()
+    {
+        do {
+            $code = 'AGT'.date('ymd').random_int(100000, 999999);
+        } while (Agent::where("agent_code", $code)->first());
+        return $code;
     }
 
     /**
@@ -70,9 +99,19 @@ class AgentController extends Controller
      * @param  \App\Models\Agent  $agent
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agent $agent)
+    public function edit(Request $request, $ids)
     {
-        //
+        $agent = Agent::find($ids);
+        $provinces = Province::orderBy('name')->get();
+        $regencies = Regency::where('province_id', $agent->province)->orderBy('name')->get();
+        $districts = District::where('regency_id', $agent->regency)->orderBy('name')->get();
+        $villages = Village::where('district_id', $agent->district)->orderBy('name')->get();
+        return view('admin/editAgent')
+                ->with('agent', $agent)
+                ->with('provinces', $provinces)
+                ->with('regencies', $regencies)
+                ->with('districts', $districts)
+                ->with('villages', $villages);
     }
 
     /**
@@ -84,7 +123,25 @@ class AgentController extends Controller
      */
     public function update(Request $request, Agent $agent)
     {
-        //
+        try {
+            $agent = Agent::find($request->ids);
+            $agent->agent_name = $request->name;
+            $agent->province = $request->province;
+            $agent->regency = $request->regency;
+            $agent->district = $request->district;
+            $agent->village = $request->village;
+            $agent->agent_description = $request->note;
+            $agent->agent_address = $request->address;
+            $agent->agent_phone = $request->phone;
+            $agent->agent_email = $request->email;
+            if (!$agent->save()) {
+                return response()->json(["result"=>FALSE, "message"=>"Failed to update agent data"]);
+            }
+            return response()->json(["result"=>TRUE, "message"=>"Successfully update agent data", "agent"=>$agent]);
+        } 
+        catch (\Exception $e) {
+            return response()->json(["result"=>FALSE, "message"=>"Failed to update agent data", "exception"=>$e]);
+        }
     }
 
     /**

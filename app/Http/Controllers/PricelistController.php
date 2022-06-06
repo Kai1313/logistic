@@ -197,7 +197,7 @@ class PricelistController extends Controller
     public function getRegencies(Request $request)
     {
         try {
-            $regencies = Regency::where('province_id', $request->ids)->orderBy('name')->get();
+            $regencies = Regency::where('province_id', $request->que)->orderBy('name')->get();
             return response()->json(["result"=>TRUE, "message"=>"Successfully fetched regencies data", "data"=>$regencies]);
         } 
         catch (\Exception $e) {

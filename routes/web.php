@@ -62,6 +62,10 @@ Route::get('admin/manageAgent/create', [AgentController::class, 'create']
 )->name('create-agent');
 Route::post('admin/manageAgent/store', [AgentController::class, 'store']
 )->name('store-agent');
+Route::get('admin/manageAgent/edit/{id}', [AgentController::class, 'edit']
+)->name('edit-agent/{id}');
+Route::post('admin/manageAgent/update', [AgentController::class, 'update']
+)->name('update-agent');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

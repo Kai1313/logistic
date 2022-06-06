@@ -13,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Create Agent</h1>
+            <h1>Edit Agent</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Create Agent</li>
+              <li class="breadcrumb-item active">Edit Agent</li>
             </ol>
           </div>
         </div>
@@ -32,21 +32,22 @@
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create New Agent <small></small></h3>
+                            <h3 class="card-title">Edit New Agent <small></small></h3>
                         </div>
                         <form id="quickForm" action="" method="POST">
                             <div class="card-body">
                                 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="ids" id="ids" value="{{ $agent->agent_id }}">
                                 <div class="form-group">
                                     <label for="">Name</label>
-                                    <input type="text" name="name" class="form-control" id="" placeholder="Agent Name">
+                                    <input type="text" name="name" class="form-control" id="" value="{{ $agent->agent_name }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Province</label>
                                     <select name="province" id="province" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Province</option>
                                         @foreach ($provinces as $province)
-                                            <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                            <option value="{{ $province->id }}" {{ ($agent->province == $province->id) ? 'selected' : '' }}>{{ $province->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -54,35 +55,44 @@
                                     <label for="">Regency</label>
                                     <select name="regency" id="regency" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Regency</option>
+                                        @foreach ($regencies as $regency)
+                                            <option value="{{ $regency->id }}" {{ ($agent->regency == $regency->id) ? 'selected' : '' }}>{{ $regency->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">District</label>
                                     <select name="district" id="district" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick District</option>
+                                        @foreach ($districts as $district)
+                                            <option value="{{ $district->id }}" {{ ($agent->district == $district->id) ? 'selected' : '' }}>{{ $district->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Village</label>
                                     <select name="village" id="village" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Village</option>
+                                        @foreach ($villages as $village)
+                                            <option value="{{ $village->id }}" {{ ($agent->village == $village->id) ? 'selected' : '' }}>{{ $village->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Address</label>
-                                    <input type="text" name="address" class="form-control" id="" placeholder="Agent Address">
+                                    <input type="text" name="address" class="form-control" id="" value="{{ $agent->agent_address }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Note</label>
-                                    <textarea name="note" class="form-control" rows="3" placeholder="Agent Note ..."></textarea>
+                                    <textarea name="note" class="form-control" rows="3" placeholder="Agent Note ...">{{ $agent->agent_description }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Phone</label>
-                                    <input type="text" name="phone" class="form-control" id="" placeholder="Agent Phone">
+                                    <input type="text" name="phone" class="form-control" id="" value="{{ $agent->agent_phone }}">
                                 </div>                                
                                 <div class="form-group">
                                     <label for="">Email</label>
-                                    <input type="text" name="email" class="form-control" id="" placeholder="Agent Email">
+                                    <input type="text" name="email" class="form-control" id="" value="{{ $agent->agent_email }}">
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -129,7 +139,7 @@
         $.validator.setDefaults({
             submitHandler: function () {
                 // alert( "Form successful submitted!" );
-                store()
+                update()
             }
         });
         $('#quickForm').validate({
@@ -192,9 +202,9 @@
         $(container).append(html).trigger('change')
     }
 
-    function store() {
+    function update() {
         $.ajax({
-            url: "{{ route('store-agent') }}",
+            url: "{{ route('update-agent') }}",
             type: "POST",
             data: $('#quickForm').serialize(),
             success: function (data) {
