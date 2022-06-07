@@ -13,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Create Agent</h1>
+            <h1>Create User</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Create Agent</li>
+              <li class="breadcrumb-item active">Create User</li>
             </ol>
           </div>
         </div>
@@ -32,39 +32,31 @@
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create New Agent <small></small></h3>
+                            <h3 class="card-title">Create New User <small></small></h3>
                         </div>
                         <form id="quickForm" action="" method="POST">
                             <div class="card-body">
                                 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                                 <div class="form-group">
                                     <label for="">Name</label>
-                                    <input type="text" name="name" class="form-control" id="" placeholder="Agent Name">
+                                    <input type="text" name="name" class="form-control" id="" placeholder="Username">
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Province</label>
-                                    <select name="province" id="province" class="form-control select2bs4" style="width: 100%;">
-                                        <option value="">Pick Province</option>
-                                        @foreach ($provinces as $province)
-                                            <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                    <label for="">Agent</label>
+                                    <select name="agent" id="agent" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Agent</option>
+                                        @foreach ($agents as $agent)
+                                            <option value="{{ $agent->agent_id }}">{{ $agent->agent_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Address</label>
-                                    <input type="text" name="address" class="form-control" id="" placeholder="Agent Address">
-                                </div>
-                                <div class="form-group">
-                                    <label>Note</label>
-                                    <textarea name="note" class="form-control" rows="3" placeholder="Agent Note ..."></textarea>
+                                    <label for="">Email</label>
+                                    <input type="text" name="email" class="form-control" id="" placeholder="User Email">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Phone</label>
-                                    <input type="text" name="phone" class="form-control" id="" placeholder="Agent Phone">
-                                </div>                                
-                                <div class="form-group">
-                                    <label for="">Email</label>
-                                    <input type="text" name="email" class="form-control" id="" placeholder="Agent Email">
+                                    <input type="text" name="phone" class="form-control" id="" placeholder="User Phone">
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -176,7 +168,7 @@
 
     function store() {
         $.ajax({
-            url: "{{ route('store-agent') }}",
+            url: "{{ route('store-user') }}",
             type: "POST",
             data: $('#quickForm').serialize(),
             success: function (data) {

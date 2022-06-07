@@ -220,6 +220,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('manage-user') }}" class="nav-link {{ request()->is('manage-user') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage User
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

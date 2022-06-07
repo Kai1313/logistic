@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PricelistController;
 use App\Http\Controllers\AirwaybillController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ Route::get('/manage-airwaybill', function () {
 Route::get('/manage-agent', function () {
     return view('admin/manageAgent');
 })->name('manage-agent');
+Route::get('/manage-user', function () {
+    return view('admin/manageUser');
+})->name('manage-user');
 Route::get('/pricelist-data', [PricelistController::class, 'pricelistData']
 )->name('pricelist-data');
 Route::get('admin/managePricelist/create', [PricelistController::class, 'create']
@@ -66,6 +70,17 @@ Route::get('admin/manageAgent/edit/{id}', [AgentController::class, 'edit']
 )->name('edit-agent/{id}');
 Route::post('admin/manageAgent/update', [AgentController::class, 'update']
 )->name('update-agent');
+
+Route::get('/user-data', [UserController::class, 'userData']
+)->name('user-data');
+Route::get('admin/manageUser/create', [UserController::class, 'create']
+)->name('create-user');
+Route::post('admin/manageUser/store', [UserController::class, 'store']
+)->name('store-user');
+Route::get('admin/manageUser/edit/{id}', [UserController::class, 'edit']
+)->name('edit-user/{id}');
+Route::post('admin/manageUser/update', [UserController::class, 'update']
+)->name('update-user');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
