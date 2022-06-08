@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PricelistController;
 use App\Http\Controllers\AirwaybillController;
 use App\Http\Controllers\AgentController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
+    dd(session()->all());
     return view('admin/dashboard');
 })->name('homes');
 Route::get('/manage-pricelist', function () {
