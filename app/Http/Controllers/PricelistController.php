@@ -9,6 +9,8 @@ use App\Models\District;
 use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Imports\PricelistImport;
+use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
 use DB;
 
@@ -192,6 +194,12 @@ class PricelistController extends Controller
         catch (\Exception $e) {
             return response()->json(["result"=>FALSE, "message"=>"Failed to fetch pricelist data", "exception"=>$e]);
         }
+    }
+
+    public function import(Request $request)
+    {
+        // dd($request->all());
+        dd(Excel::toCollection(new PricelistImport, $request->file('imported')));
     }
 
     public function getRegencies(Request $request)

@@ -20,7 +20,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
-    dd(session()->all());
+    // dd(session()->all());
     return view('admin/dashboard');
 })->name('homes');
 Route::get('/manage-pricelist', function () {
@@ -53,6 +53,8 @@ Route::post('admin/managePricelist/update', [PricelistController::class, 'update
 )->name('update-pricelist');
 Route::post('admin/managePricelist/fetch', [PricelistController::class, 'fetch']
 )->name('fetch-pricelist');
+Route::post('admin/managePricelist/import', [PricelistController::class, 'import']
+)->name('import-pricelist');
 
 Route::get('/airwaybill-data', [AirwaybillController::class, 'airwaybillData']
 )->name('airwaybill-data');

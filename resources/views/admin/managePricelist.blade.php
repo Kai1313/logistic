@@ -34,7 +34,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 mb-2">
-                                        <button type="button" class="btn btn-outline-info float-right ml-1"><i class="fa fa-file-import"></i> Import Pricelist</button>
+                                        <button type="button" class="btn btn-outline-info float-right ml-1" data-toggle="modal" data-target="#modal-import"><i class="fa fa-file-import"></i> Import Pricelist</button>
                                         <a href="{{ route('create-pricelist') }}" class="btn btn-outline-success float-right"><i class="fa fa-plus-circle"></i> Add Pricelist</a>
                                     </div>
                                 </div>
@@ -62,6 +62,33 @@
             </div>
         </section>
     </div>
+@endsection
+@section('addon-modal')
+<div class="modal fade" id="modal-import">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Import Pricelist</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+                <div class="modal-body">
+                    <form id="import-form" action="" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                            <label for="">Imported File (.xls/.xlsx)</label>
+                            <input type="file" name="imported" id="imported" class="form-control">
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-import">Submit</button>
+            </div>
+        </div>
+    </div>
+  </div>
 @endsection
 @section('addon-js')
     <!-- DataTables  & Plugins -->
@@ -113,6 +140,26 @@
                 {data: 'duedate', name: 'duedate', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
+        })
+
+        $('#btn-import').on('click', function(){
+            let myForm = document.getElementById('import-form')
+            let formData = new FormData(myForm)
+            console.log(formData)
+            $.ajax({
+                url: "{{ route('import-pricelist') }}",
+                data: formData,
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: false,
+                processData: false, 
+                success: function() {
+                    console.log('success')
+                },
+                error: function() {
+                    console.log('error')
+                }
+            })
         })
     });
     </script>
