@@ -43,6 +43,14 @@
                                     <input type="text" name="name" class="form-control" id="" value="{{ $agent->agent_name }}">
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Type</label>
+                                    <select name="type" id="type" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Type</option>
+                                        <option value="-1" {{ ($agent->agent_type == $province->id) ? 'selected' : '' }}>Pusat</option>
+                                        <option value="0">Agent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="">Province</label>
                                     <select name="province" id="province" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Province</option>

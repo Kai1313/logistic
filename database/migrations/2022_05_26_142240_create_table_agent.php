@@ -17,6 +17,7 @@ return new class extends Migration
             $table->char('agent_id', 36);
             $table->char('agent_code', 36)->unique();
             $table->string('agent_name', 128);
+            $table->tinyInteger('agent_type');
             $table->string('province', 128);
             $table->string('regency', 128);
             $table->string('district', 128)->nullable();

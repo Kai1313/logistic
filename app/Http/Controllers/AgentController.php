@@ -55,6 +55,7 @@ class AgentController extends Controller
             $agent = new Agent;
             $agent->agent_id = Str::uuid();
             $agent->agent_name = $request->name;
+            $agent->agent_type = $request->type;
             $agent->province = $request->province;
             $agent->regency = $request->regency;
             $agent->district = $request->district;
@@ -126,6 +127,7 @@ class AgentController extends Controller
         try {
             $agent = Agent::find($request->ids);
             $agent->agent_name = $request->name;
+            $agent->agent_type = $request->type;
             $agent->province = $request->province;
             $agent->regency = $request->regency;
             $agent->district = $request->district;

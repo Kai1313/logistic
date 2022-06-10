@@ -42,12 +42,38 @@
                                     <input type="text" name="name" class="form-control" id="" placeholder="Agent Name">
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Type</label>
+                                    <select name="type" id="type" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Type</option>
+                                        <option value="-1">Pusat</option>
+                                        <option value="0">Agent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="">Province</label>
                                     <select name="province" id="province" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Province</option>
                                         @foreach ($provinces as $province)
                                             <option value="{{ $province->id }}">{{ $province->name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Regency</label>
+                                    <select name="regency" id="regency" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Regency</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">District</label>
+                                    <select name="district" id="district" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick District</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Village</label>
+                                    <select name="village" id="village" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Village</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
