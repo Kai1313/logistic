@@ -37,6 +37,8 @@ Route::get('/manage-user', function () {
 })->name('manage-user');
 Route::get('/pricelist-data', [PricelistController::class, 'pricelistData']
 )->name('pricelist-data');
+Route::get('/pricelist-find', [PricelistController::class, 'pricelistFind']
+)->name('pricelist-find');
 Route::get('admin/managePricelist/create', [PricelistController::class, 'create']
 )->name('create-pricelist');
 Route::get('admin/managePricelist/getRegencies', [PricelistController::class, 'getRegencies']

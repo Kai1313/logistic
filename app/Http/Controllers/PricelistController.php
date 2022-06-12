@@ -180,16 +180,33 @@ class PricelistController extends Controller
         // return response()->json(["dataTable"=>$pricelist]);
     }
 
+    public function pricelistFind(Request $request)
+    {
+        $pricelist = Pricelist::orderBy('pricelist_code')->get();
+        $pricelist = DataTables::of($pricelist)
+                    ->addColumn('duedate', function($row){
+                        $due = $row["pricelist_minimum_duedate"].' - '.$row["pricelist_maximum_duedate"];
+                        return $due;
+                    })
+                    ->addColumn('action', function($row){
+                        $btn = '<button onclick="pickPricelist(\''.$row["pricelist_id"].'\')" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Pick</button>';
+                        return $btn;
+                    })
+                    ->rawColumns(['duedate', 'action'])
+                    ->make(true);
+        return $pricelist;
+    }
+
     public function fetch(Request $request)
     {
         try {
             $pricelist = Pricelist::select('pricelists.*', 'provinces.name as province_name', 'regencies.name as regency_name', 'districts.name as district_name', 'villages.name as village_name')->where('pricelist_id', $request->ids)
-            ->join('provinces', 'pricelists.province', '=', 'provinces.id')
-            ->join('regencies', 'pricelists.regency', '=', 'regencies.id')
-            ->join('districts', 'pricelists.district', '=', 'districts.id')
-            ->join('villages', 'pricelists.village', '=', 'villages.id')
+            ->leftjoin('provinces', 'pricelists.province', '=', 'provinces.id')
+            ->leftjoin('regencies', 'pricelists.regency', '=', 'regencies.id')
+            ->leftjoin('districts', 'pricelists.district', '=', 'districts.id')
+            ->leftjoin('villages', 'pricelists.village', '=', 'villages.id')
             ->first();
-            return response()->json(["result"=>TRUE, "message"=>"Successfully fetched regencies data", "pricelist"=>$pricelist]);
+            return response()->json(["result"=>TRUE, "message"=>"Successfully fetched pricelist data", "pricelist"=>$pricelist]);
         } 
         catch (\Exception $e) {
             return response()->json(["result"=>FALSE, "message"=>"Failed to fetch pricelist data", "exception"=>$e]);
@@ -199,7 +216,37 @@ class PricelistController extends Controller
     public function import(Request $request)
     {
         // dd($request->all());
-        dd(Excel::toCollection(new PricelistImport, $request->file('imported')));
+        // dd(Excel::toCollection(new PricelistImport, $request->file('imported')));
+        // return response()->json(["result"=>TRUE, "message"=>"Successfully importing pricelist data"]);
+        try {
+            $importeds = Excel::toCollection(new PricelistImport, $request->file('imported'));
+            // dd($importeds[0]);
+            DB::beginTransaction();
+            foreach ($importeds[0] as $imported) {
+                $pricelist = new Pricelist;
+                $pricelist->pricelist_id = Str::uuid();
+                $pricelist->pricelist_code = $imported["code"];
+                $pricelist->pricelist_note = $imported["note"];
+                $pricelist->pricelist_type = ($imported["type"] != null)?$imported["type"]:'REG';
+                $pricelist->pricelist_destination = $imported["destination"];
+                $pricelist->pricelist_price = ($imported["price"] != null)?$imported["price"]:0;
+                $pricelist->pricelist_price_volume = ($imported["spcprice"] != null)?$imported["spcprice"]:0;
+                $pricelist->pricelist_minimum_weight = ($imported["minweight"] != null)?$imported["minweight"]:1;
+                $pricelist->pricelist_minimum_volume = ($imported["minvolume"] != null)?$imported["minvolume"]:1;
+                $pricelist->pricelist_minimum_duedate = $imported["mindue"];
+                $pricelist->pricelist_maximum_duedate = $imported["maxdue"];
+                $pricelist->pricelist_status = ($imported["sts"] != null)?$imported["sts"]:0;
+                if (!$pricelist->save()) {
+                    DB::rollback();
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to import pricelist data", "failed"=>$imported]);
+                }
+            }
+            DB::commit();
+            return response()->json(["result"=>TRUE, "message"=>"Successfully importing pricelist data", "count"=>count($importeds[0])]);
+        } 
+        catch (\Throwable $e) {
+            return response()->json(["result"=>FALSE, "message"=>"Failed to import pricelist data", "exception"=>$e]);
+        }
     }
 
     public function getRegencies(Request $request)

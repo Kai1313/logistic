@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Airwaybill;
 use App\Models\Pricelist;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
@@ -156,6 +157,8 @@ class AirwaybillController extends Controller
 
     public function print(Request $request)
     {
-        return view('admin/printAirwaybill');
+        $logo = Setting::find('company_logo');
+        return view('admin/printAirwaybill')
+                ->with('logo', $logo->setting_value);
     }
 }

@@ -153,11 +153,37 @@
                 dataType: 'JSON',
                 contentType: false,
                 processData: false, 
-                success: function() {
+                success: function(data) {
                     console.log('success')
+                    if (data.result) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#pricelist-table').DataTable().ajax.reload()
+                            }
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
                 },
                 error: function() {
                     console.log('error')
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             })
         })

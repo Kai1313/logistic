@@ -107,7 +107,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <td class="w-3">
-                                <img src="{{ asset('assets/images/logo/mtl-logo.png') }}" alt="" srcset="" width="100%" style="margin: auto; display: block;">
+                                <img src="{{ asset($logo) }}" alt="" srcset="" width="100%" style="margin: auto; display: block;">
                             </td>
                             <td colspan="5" class="w-9">
                                 <div class="header-barcode">

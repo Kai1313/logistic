@@ -46,8 +46,8 @@
                                     <label for="">Type</label>
                                     <select name="type" id="type" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Type</option>
-                                        <option value="-1" {{ ($agent->agent_type == $province->id) ? 'selected' : '' }}>Pusat</option>
-                                        <option value="0">Agent</option>
+                                        <option value="-1" {{ ($agent->agent_type == '-1') ? 'selected' : '' }}>Pusat</option>
+                                        <option value="0" {{ ($agent->agent_type == '0') ? 'selected' : '' }}>Agent</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -195,7 +195,13 @@
                     populateOptions(data.data, container, str)
                 }
                 else {
-                    alert(data.message)
+                    console.log(data.message)
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    })
                 }
             }
         })
@@ -217,19 +223,20 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    Swal.fire(
-                        'Good job!',
-                        data.message,
-                        'success'
-                    )
-                    // alert(data.message)
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
                 }
                 else {
-                    Swal.fire(
-                        'Ooopss!',
-                        data.message,
-                        'error'
-                    )
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             },
             error: function() {

@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('table_default_settings', function (Blueprint $table) {
-            $table->id();
+        Schema::create('settings', function (Blueprint $table) {
+            $table->char('setting_id', 36);
+            $table->string('setting_type', 100);
+            $table->text('setting_value');
             $table->timestamps();
+            $table->primary(['setting_id']);
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_default_settings');
+        Schema::dropIfExists('settings');
     }
 };

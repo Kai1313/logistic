@@ -3,8 +3,10 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets/lte/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="{{ asset('assets/lte/plugins/sweetalert2/sweetalert2.css') }}">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('assets/lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('onpage-css')
     <style>
@@ -68,37 +70,37 @@
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Min. Cost</label>
                                             <h3 for="" id="showCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Min. Weight</label>
                                             <h3 for="" id="showMinimumWeight">1kg</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Package Cost</label>
                                             <h3 for="" id="showPackageCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Insurance</label>
                                             <h3 for="" id="showInsuranceCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Additional</label>
                                             <h3 for="" id="showAdditionalCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Packaging</label>
                                             <h3 for="" id="showPackagingCost">Rp5000</h3>
@@ -106,13 +108,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-6">
                                         <div class="form-group">
                                             <label for="">Discount</label>
                                             <h3 for="" id="showDiscountCost">Rp5000</h3>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <div class="form-group">
                                             <label for="">Total</label>
                                             <h1 for="" id="showTotalCost">Rp20000</h1>
@@ -176,18 +178,25 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <input type="hidden" name="pricelist" id="pricelist" value="0">
                                             <input type="hidden" name="hiddenPricelist" id="hiddenPricelist" value="0">
                                             <input type="hidden" name="hiddenSpecialPricelist" id="hiddenSpecialPricelist" value="0">
                                             <input type="hidden" name="hiddenMinimumWeight" id="hiddenMinimumWeight" value="0">
                                             <input type="hidden" name="hiddenSubCost" id="hiddenSubCost" value="0">
                                             <input type="hidden" name="hiddenTotalCost" id="hiddenTotalCost" value="0">
                                             <label for="">Pricelist</label>
-                                            <select name="pricelist" id="pricelist" class="form-control select2bs4" style="width: 100%;">
+                                            {{-- <select name="pricelist" id="pricelist" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="">Pick a price</option>
                                                 @foreach ($pricelists as $pricelist)
                                                     <option value="{{ $pricelist->pricelist_id }}">{{ $pricelist->pricelist_destination }}</option>
                                                 @endforeach
-                                            </select>
+                                            </select> --}}
+                                            <div class="input-group mb-3">
+                                                <input id="pricelistShow" name="pricelistShow" type="text" class="form-control" readonly>
+                                                <div class="input-group-prepend">
+                                                  <button id="btn-find" type="button" class="btn btn-info"><i class="fa fa-search"></i> Find</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -321,7 +330,7 @@
                                 </div>
                             </div>
                             <div class="card-footer float-right">
-                                <button id="btn-print" class="btn btn-outline-success float-right" disabled><i class="fas fa-print"></i> Print</button>
+                                <button id="btn-print" type="button" class="btn btn-outline-success float-right" disabled><i class="fas fa-print"></i> Print</button>
                                 <button type="submit" class="btn btn-primary float-right mr-1">Submit</button>
                             </div>
                         </div>
@@ -332,20 +341,103 @@
     </section>
 </div>
 @endsection
+@section('addon-modal')
+    <div class="modal fade" id="modal-pricelist">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Extra Large Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table id="pricelist-table" class="table table-bordered table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>Code</th>
+                                            <th>Destination</th>
+                                            <th>Type</th>
+                                            <th>Price/Kg</th>
+                                            <th>Price/M<sup>3</sup></th>
+                                            <th>Min. <br> Weight(Kg)</th>
+                                            <th>Min. <br> Volume(M<sup>3</sup>)</th>
+                                            <th>Duedate</th>                                            
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('addon-js')
     <!-- Select2 -->
     <script src="{{ asset('assets/lte/plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- jquery-validation -->
     <script src="{{ asset('assets/lte/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/lte/plugins/jquery-validation/additional-methods.min.js') }}"></script>
-    <!-- SweetAlert2 -->
-    <script src="{{ asset('assets/lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('assets/lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('assets/lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 @endsection
 @section('script-js')
 <script>
     $(function () {
         $('.select2bs4').select2({
             theme: 'bootstrap4'
+        })
+        
+        // Pricelist modal
+        $("#btn-find").on('click', function() {
+            $("#modal-pricelist").modal('show')
+            $('#priceist-table').DataTable().ajax.reload()
+        })
+
+        $('#pricelist-table').DataTable({
+            "responsive": true,
+            "autoWidth": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{{ route('pricelist-find') }}",
+            "columns": [
+                {data: 'action', name: 'action', orderable: false, searchable: false,},
+                {data: 'pricelist_code', name: 'pricelist_code'},
+                {data: 'pricelist_destination', name: 'pricelist_destination'},
+                {data: 'pricelist_type', name: 'pricelist_type'},
+                {data: 'pricelist_price', name: 'pricelist_price'},
+                {data: 'pricelist_price_volume', name: 'pricelist_price_volume'},
+                {data: 'pricelist_minimum_weight', name: 'pricelist_minimum_weight'},
+                {data: 'pricelist_minimum_volume', name: 'pricelist_minimum_volume'},
+                {data: 'duedate', name: 'duedate', orderable: false, searchable: false},
+            ]
+        })
+
+        $('#btn-print').on('click', function() {
+            let printId = $("#btn-print").data("printId")
+            console.log(printId)
+            let url = "{{ route('print-airwaybill', ['ids'=>':ids']) }}".replace(':ids', printId)
+            window.open(url, '_blank').focus()
         })
 
         // Dimension change
@@ -375,9 +467,9 @@
         $("#weightType").on('change', function() {
             costSum()
         })
-        $("#pricelist").on('change', function() {
-            fetchPricelist($("#pricelist").val())
-        })
+        // $("#pricelist").on('change', function() {
+        //     fetchPricelist($("#pricelist").val())
+        // })
         $("#insurance").change(function() {
             costSum()
         })
@@ -395,12 +487,45 @@
         });
         $('#quickForm').validate({
             rules: {
-                // code: {
-                //     required: true,
-                // },
-                // province: {
-                //     required: true,
-                // },
+                weight: {
+                    required: true, number: true,
+                },
+                width: {
+                    required: true, number: true,
+                },
+                length: {
+                    required: true, number: true,
+                },
+                height: {
+                    required: true, number: true,
+                },
+                packagingCost: {
+                    required: true, number: true,
+                },
+                pricelistShow: {
+                    required: true,
+                },
+                description: {
+                    required: true,
+                },
+                originName: {
+                    required: true,
+                },
+                originContact: {
+                    required: true,
+                },
+                originDescription: {
+                    required: true,
+                },
+                destinationName: {
+                    required: true,
+                },
+                destinationContact: {
+                    required: true,
+                },
+                destinationDescription: {
+                    required: true,
+                },
             },
             messages: {
                 email: {
@@ -460,27 +585,30 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    Swal.fire(
-                        'Good job!',
-                        data.message,
-                        'success'
-                    )
-                    // alert(data.message)
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
+                    $('#btn-print').attr('disabled', false).data('printId', data.airwaybill["awb_id"])
                 }
                 else {
-                    Swal.fire(
-                        'Ooopss!',
-                        data.message,
-                        'error'
-                    )
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             },
             error: function() {
-                Swal.fire(
-                    'Oooopsss!',
-                    'Something goes wrong!',
-                    'error'
-                )
+                Swal.fire({
+                    title: 'Failed!',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
             }
         })
     }
@@ -566,20 +694,19 @@
       return res
     }
 
-    function fetchPricelist(ids, type) {
+    function fetchPricelist(ids) {
         let weight = ($("#weight").val() == "") ? parseFloat(1) : parseFloat($("#weight").val())
         let res = 0
         $.ajax({
             url: "{{ route('fetch-pricelist') }}",
-            type: "POSt",
+            type: "POST",
             data: {_token: "{{ csrf_token() }}", ids: ids},
             success: function (data) {
-                price = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price"]) : parseFloat(0)
-                specialPrice = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price_volume"]) : parseFloat(0)
+                let price = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price"]) : parseFloat(0)
+                let specialPrice = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price_volume"]): parseFloat(0)
                 let minWeight = parseFloat(data.pricelist["pricelist_minimum_weight"])
-                if (minWeight > weight) {
-                    price = price*minWeight
-                }
+                $("#pricelistShow").val(data.pricelist["pricelist_destination"])
+                $("#pricelist").val(data.pricelist["pricelist_id"])
                 $("#hiddenPricelist").val(price)
                 $("#hiddenSpecialPricelist").val(specialPrice)
                 $("#hiddenMinimumWeight").val(minWeight)
@@ -594,8 +721,13 @@
 
                 // Recalculate
                 costSum()
+                $("#modal-pricelist").modal('hide')
             }
         })      
+    }
+
+    function pickPricelist(ids) {
+        fetchPricelist(ids)
     }
 </script>
 @endsection

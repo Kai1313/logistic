@@ -211,7 +211,13 @@
                     populateOptions(data.data, container, str)
                 }
                 else {
-                    alert(data.message)
+                    console.log(data.message)
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             }
         })
@@ -233,10 +239,20 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    alert(data.message)
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
                 }
                 else {
-                    alert(data.message)
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             }
         })

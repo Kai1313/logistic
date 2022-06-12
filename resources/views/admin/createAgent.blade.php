@@ -207,27 +207,29 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    Swal.fire(
-                        'Good job!',
-                        data.message,
-                        'success'
-                    )
-                    // alert(data.message)
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
                 }
                 else {
-                    Swal.fire(
-                        'Ooopss!',
-                        data.message,
-                        'error'
-                    )
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             },
             error: function() {
-                Swal.fire(
-                    'Oooopsss!',
-                    'Something goes wrong!',
-                    'error'
-                )
+                Swal.fire({
+                    title: 'Failed!',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
             }
         })
     }

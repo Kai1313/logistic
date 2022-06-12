@@ -152,7 +152,13 @@
                     populateOptions(data.data, container, str)
                 }
                 else {
-                    alert(data.message)
+                    console.log(data.message)
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             }
         })
@@ -174,15 +180,20 @@
             data: $('#quickForm').serialize(),
             success: function (data) {
                 if (data.result) {
-                    Swal.fire(
-                        'Good job!',
-                        data.message,
-                        'success'
-                    )
-                    // alert(data.message)
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
                 }
                 else {
-                    Swal.fire(
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })Swal.fire(
                         'Ooopss!',
                         data.message,
                         'error'
