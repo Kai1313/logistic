@@ -155,10 +155,14 @@ class AirwaybillController extends Controller
         return $airwaybill;
     }
 
-    public function print(Request $request)
+    public function print(Request $request, $ids)
     {
         $logo = Setting::find('company_logo');
+        $awb = Airwaybill::find($ids);
+        $pricelist = Pricelist::find($awb->pricelist_id);
         return view('admin/printAirwaybill')
+                ->with('awb', $awb)
+                ->with('pricelist', $pricelist)
                 ->with('logo', $logo->setting_value);
     }
 }

@@ -111,10 +111,10 @@
                             </td>
                             <td colspan="5" class="w-9">
                                 <div class="header-barcode">
-                                    <span><img class="center" src="data:image/png;base64, {{ DNS1D::getBarcodePNG('MTL0101172819', 'C128') }}" alt="barcode" width="60%" /></span>
+                                    <span><img class="center" src="data:image/png;base64, {{ DNS1D::getBarcodePNG($awb->awb_code, 'C128') }}" alt="barcode" width="60%" /></span>
                                 </div>
                                 <div class="awb-code">
-                                    <h3 class="text-center"><?= strtoupper('MTL0101172819'); ?></h3>
+                                    <h3 class="text-center">{{ strtoupper($awb->awb_code) }}</h3>
                                 </div>
                             </td>
                         </tr>
@@ -125,8 +125,8 @@
                                         <h3 class="text-right">Pengirim :</h3>
                                     </div>
                                     <div class="col-9">
-                                        <h4>John Doe [08512345689]</h4>
-                                        <h4>Prima Estate Wilayut Sukodono Sidoarjo Jawa Timur</h4>
+                                        <h4>{{ ($awb->alias_name == '')?ucwords($awb->origin_name).' ['.$awb->origin_contact.']':ucwords($awb->alias_name).'['.$awb->alias_contact.']' }}</h4>
+                                        <h4>{{ ($awb->alias_name == '')?ucwords($awb->origin_description):ucwords($awb->alias_description) }}</h4>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -134,8 +134,8 @@
                                         <h3 class="text-right">Penerima :</h3>
                                     </div>
                                     <div class="col-9">
-                                        <h4>Lilian Shaw [085987654321]</h4>
-                                        <h4>Green Garden Serpong BSD Tangerang Jawa Barat</h4>
+                                        <h4>{{ ucwords($awb->destination_name.' ['.$awb->destination_contact.']') }}</h4>
+                                        <h4>{{ ucwords($awb->destination_description) }}</h4>
                                     </div>
                                 </div>
                             </td>
@@ -144,36 +144,36 @@
                             <td rowspan="2" class="bold" style="vertical-align: middle;">
                                 <div class="row">
                                     <div class="col-6">Tarif</div>
-                                    <div class="col-6">Rp 10000</div>
+                                    <div class="col-6">Rp {{ $awb->awb_cost }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">Asuransi</div>
-                                    <div class="col-6">Rp 10000</div>
+                                    <div class="col-6">Rp {{ $awb->awb_insurance_cost }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">Tambahan</div>
-                                    <div class="col-6">Rp 10000</div>
+                                    <div class="col-6">Rp {{ $awb->awb_additional_cost }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">Diskon</div>
-                                    <div class="col-6">Rp 10000</div>
+                                    <div class="col-6">Rp {{ $awb->awb_discount }}</div>
                                 </div>
                             </td>
                             <td class="w-2 text-center">
-                                <span class="bold">1kg</span>
+                                <span class="bold">{{ $awb->awb_weight }}kg</span>
                             </td>
                             <td class="w-2 text-center">
-                                <span class="bold">REG</span>
+                                <span class="bold">{{ $pricelist->pricelist_type }}</span>
                             </td>
                             <td class="w-2 text-center">
-                                <span class="bold">Tunai</span>
+                                <span class="bold">{{ ($awb->awb_payment_method == 0)?'TUNAI':'NON-TUNAI' }}</span>
                             </td>
                             <td class="w-2 text-center">
-                                <span class="bold">Non-COD</span>
+                                <span class="bold">{{ ($awb->awb_acceptance_method == 0)?'Non-COD':'COD' }}</span>
                             </td>
                             <td rowspan="2">
                                 <div class="qr-code">
-                                    <?php echo DNS2D::getBarcodeSVG('https://www.wilanexpress.com/goToTrack?awb=MTL0101222222', 'QRCODE', 5, 5, true); ?>
+                                    <?php echo DNS2D::getBarcodeSVG('https://www.mtlexpress.com/goToTrack?awb='.$awb->awb_code, 'QRCODE', 5, 5, true); ?>
                                 </div>
                             </td>
                         </tr>
@@ -181,20 +181,20 @@
                             <td colspan="3" style="vertical-align: middle;">
                                 <div class="row">
                                     <div class="col-3">Tujuan <span class="float-right">:</span></div>
-                                    <div class="col-9">Tangerang Jawa Barat</div>
+                                    <div class="col-9">{{ $pricelist->pricelist_destination }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-3">Estimasi <span class="float-right">:</span></div>
-                                    <div class="col-9">2 - 3 Hari</div>
+                                    <div class="col-9">{{ $pricelist->pricelist_minimum_duedate.' - '.$pricelist->pricelist_maximum_duedate }} Hari</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-3">Informasi <span class="float-right">:</span></div>
-                                    <div class="col-9">Barang pecah belah jangan dibanting</div>
+                                    <div class="col-9">{{ ucwords($awb->description) }}{{ ($awb->special_instruction != '')?' ['.ucwords($awb->special_instruction).']':'' }}</div>
                                 </div>
                             </td>
                             <td class="text-center">
                                 <h4 class="bold">Total Biaya</h4>
-                                <h3 class="bold">Rp 20000</h3>
+                                <h3 class="bold">Rp {{ $awb->awb_total_cost }}</h3>
                             </td>
                         </tr>
                     </table>
