@@ -7,6 +7,7 @@ use App\Models\Province;
 use App\Models\Regency;
 use App\Models\District;
 use App\Models\Village;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
@@ -21,7 +22,11 @@ class AgentController extends Controller
      */
     public function index()
     {
-        //
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
+        return view('admin/manageAgent')
+                ->with("setting", $setting);
     }
 
     /**
@@ -35,7 +40,11 @@ class AgentController extends Controller
         $regencies = Regency::orderBy('name')->get();
         $districts = District::orderBy('name')->get();
         $villages = Village::orderBy('name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/createAgent')
+                ->with("setting", $setting)
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)
                 ->with('districts', $districts)
@@ -107,7 +116,11 @@ class AgentController extends Controller
         $regencies = Regency::where('province_id', $agent->province)->orderBy('name')->get();
         $districts = District::where('regency_id', $agent->regency)->orderBy('name')->get();
         $villages = Village::where('district_id', $agent->district)->orderBy('name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/editAgent')
+                ->with("setting", $setting)
                 ->with('agent', $agent)
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)

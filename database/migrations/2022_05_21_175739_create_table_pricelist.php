@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('pricelists', function (Blueprint $table) {
             $table->char('pricelist_id', 36);
             $table->char('pricelist_code', 36)->unique();
-            $table->string('province', 128);
-            $table->string('regency', 128);
+            $table->string('province', 128)->nullable();
+            $table->string('regency', 128)->nullable();
             $table->string('district', 128)->nullable();
             $table->string('village', 128)->nullable();
             $table->string('pricelist_destination', 128);

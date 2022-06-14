@@ -7,6 +7,7 @@ use App\Models\Province;
 use App\Models\Regency;
 use App\Models\District;
 use App\Models\Village;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Imports\PricelistImport;
@@ -23,6 +24,11 @@ class PricelistController extends Controller
      */
     public function index()
     {
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
+        return view('admin/managePricelist')
+                ->with("setting", $setting);
     }
 
     /**
@@ -36,7 +42,11 @@ class PricelistController extends Controller
         $regencies = Regency::orderBy('name')->get();
         $districts = District::orderBy('name')->get();
         $villages = Village::orderBy('name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/createPricelist')
+                ->with("setting", $setting)
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)
                 ->with('districts', $districts)
@@ -107,7 +117,11 @@ class PricelistController extends Controller
         $regencies = Regency::where('province_id', $pricelist->province)->orderBy('name')->get();
         $districts = District::where('regency_id', $pricelist->regency)->orderBy('name')->get();
         $villages = Village::where('district_id', $pricelist->district)->orderBy('name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/editPricelist')
+                ->with("setting", $setting)
                 ->with('pricelist', $pricelist)
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)

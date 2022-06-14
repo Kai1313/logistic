@@ -19,7 +19,11 @@ class AirwaybillController extends Controller
      */
     public function index()
     {
-        //
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
+        return view('admin/manageAirwaybill')
+                ->with("setting", $setting);
     }
 
     /**
@@ -30,7 +34,11 @@ class AirwaybillController extends Controller
     public function create()
     {
         $pricelists = Pricelist::latest()->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/createAirwaybill')
+                ->with("setting", $setting)
                 ->with('pricelists', $pricelists);
     }
 
@@ -76,11 +84,12 @@ class AirwaybillController extends Controller
             $airwaybill->destination_description = $request->destinationDescription;
             $airwaybill->awb_status = 1;
             $airwaybill->awb_code = $this->generateUniqueCode();
-            // dd($airwaybill);
+            $codes = $airwaybill->awb_id;
+            // dd($codes);
             if (!$airwaybill->save()) {
                 return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data"]);
             }
-            return response()->json(["result"=>TRUE, "message"=>"Successfully store airwaybill data", "airwaybill"=>$airwaybill]);
+            return response()->json(["result"=>TRUE, "message"=>"Successfully store airwaybill data", "airwaybill"=>$codes]);
         } 
         catch (\Exception $e) {
             return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data", "exception"=>$e]);

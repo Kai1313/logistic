@@ -14,7 +14,11 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        //
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
+        return view('admin/dashboard')
+                ->with("setting", $setting);
     }
 
     /**

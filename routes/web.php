@@ -7,6 +7,7 @@ use App\Http\Controllers\PricelistController;
 use App\Http\Controllers\AirwaybillController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,22 +20,11 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    // dd(session()->all());
-    return view('admin/dashboard');
-})->name('homes');
-Route::get('/manage-pricelist', function () {
-    return view('admin/managePricelist');
-})->name('manage-pricelist');
-Route::get('/manage-airwaybill', function () {
-    return view('admin/manageAirwaybill');
-})->name('manage-airwaybill');
-Route::get('/manage-agent', function () {
-    return view('admin/manageAgent');
-})->name('manage-agent');
-Route::get('/manage-user', function () {
-    return view('admin/manageUser');
-})->name('manage-user');
+Route::get('/', [SettingsController::class, 'index'])->name('homes');
+Route::get('/manage-pricelist', [PricelistController::class, 'index'])->name('manage-pricelist');
+Route::get('/manage-airwaybill', [AirwaybillController::class, 'index'])->name('manage-airwaybill');
+Route::get('/manage-agent', [AgentController::class, 'index'])->name('manage-agent');
+Route::get('/manage-user', [UserController::class, 'index'])->name('manage-user');
 Route::get('/pricelist-data', [PricelistController::class, 'pricelistData']
 )->name('pricelist-data');
 Route::get('/pricelist-find', [PricelistController::class, 'pricelistFind']

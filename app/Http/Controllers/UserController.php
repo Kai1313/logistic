@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Agent;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
+        return view('admin/manageUser')
+                ->with("setting", $setting);
     }
 
     /**
@@ -30,7 +35,11 @@ class UserController extends Controller
     public function create()
     {
         $agents = Agent::orderBy('agent_name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/createUser')
+                ->with("setting", $setting)
                 ->with('agents', $agents);
     }
 
@@ -80,7 +89,11 @@ class UserController extends Controller
     {
         $user = User::find($ids);
         $agents = Agent::orderBy('agent_name')->get();
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+        ];
         return view('admin/editUser')
+                ->with("setting", $setting)
                 ->with('user', $user)
                 ->with('agents', $agents);
     }

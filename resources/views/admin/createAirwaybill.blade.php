@@ -259,7 +259,7 @@
                                             <label>Payment Method</label>
                                             <select name="payment" id="payment" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="0">Cash</option>
-                                                <option value="1">Cashless</option>
+                                                <option value="1">Credit</option>
                                             </select>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Origin Name</label>
                                             <input type="text" name="originName" class="form-control" id="" placeholder="Origin Name">
@@ -299,7 +299,7 @@
                                             <textarea name="originDescription" class="form-control" rows="3" placeholder="Origin Description ..."></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Alias Name</label>
                                             <input type="text" name="aliasName" class="form-control" id="" placeholder="Alias Name">
@@ -312,8 +312,8 @@
                                             <label for="">Alias Description</label>
                                             <textarea name="aliasDescription" class="form-control" rows="3" placeholder="Alias Description ..."></textarea>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    </div> --}}
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Destination Name</label>
                                             <input type="text" name="destinationName" class="form-control" id="" placeholder="Destination Name">
@@ -502,6 +502,15 @@
                 packagingCost: {
                     required: true, number: true,
                 },
+                discount: {
+                    required: true, number: true,
+                },
+                insurance: {
+                    required: true, number: true,
+                },
+                additional: {
+                    required: true, number: true,
+                },
                 pricelistShow: {
                     required: true,
                 },
@@ -591,7 +600,8 @@
                         icon: 'success',
                         confirmButtonText: 'OK'
                     })
-                    $('#btn-print').attr('disabled', false).data('printId', data.airwaybill["awb_id"])
+                    console.log(data.airwaybill)
+                    $('#btn-print').attr('disabled', false).data('printId', data.airwaybill)
                 }
                 else {
                     Swal.fire({
