@@ -234,22 +234,28 @@ class PricelistController extends Controller
         // return response()->json(["result"=>TRUE, "message"=>"Successfully importing pricelist data"]);
         try {
             $importeds = Excel::toCollection(new PricelistImport, $request->file('imported'));
-            // dd($importeds[0]);
+            // dd($importeds[0][0]["code"]);
             DB::beginTransaction();
-            foreach ($importeds[0] as $imported) {
+            foreach ($importeds[0] as $key => $imported) {
+                // dd($imported['code']);
                 $pricelist = new Pricelist;
                 $pricelist->pricelist_id = Str::uuid();
-                $pricelist->pricelist_code = $imported["code"];
+                $pricelist->pricelist_code = ($imported["code"] != null)?$imported["code"]:'JEX'.$key;
                 $pricelist->pricelist_note = $imported["note"];
                 $pricelist->pricelist_type = ($imported["type"] != null)?$imported["type"]:'REG';
+                $pricelist->province = $imported["province"];
+                $pricelist->regency = $imported["regency"];
+                $pricelist->district = $imported["district"];
+                $pricelist->village = $imported["village"];
                 $pricelist->pricelist_destination = $imported["destination"];
                 $pricelist->pricelist_price = ($imported["price"] != null)?$imported["price"]:0;
                 $pricelist->pricelist_price_volume = ($imported["spcprice"] != null)?$imported["spcprice"]:0;
                 $pricelist->pricelist_minimum_weight = ($imported["minweight"] != null)?$imported["minweight"]:1;
                 $pricelist->pricelist_minimum_volume = ($imported["minvolume"] != null)?$imported["minvolume"]:1;
-                $pricelist->pricelist_minimum_duedate = $imported["mindue"];
-                $pricelist->pricelist_maximum_duedate = $imported["maxdue"];
+                $pricelist->pricelist_minimum_duedate = ($imported["mindue"] != null)?$imported["mindue"]:1;
+                $pricelist->pricelist_maximum_duedate = ($imported["maxdue"] != null)?$imported["maxdue"]:1;
                 $pricelist->pricelist_status = ($imported["sts"] != null)?$imported["sts"]:0;
+                // dd($imported["destination"]);
                 if (!$pricelist->save()) {
                     DB::rollback();
                     return response()->json(["result"=>FALSE, "message"=>"Failed to import pricelist data", "failed"=>$imported]);

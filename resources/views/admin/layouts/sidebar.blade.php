@@ -190,6 +190,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('manage-deposit') }}" class="nav-link {{ request()->is('manage-deposit') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage Deposit
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

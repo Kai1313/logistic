@@ -11,12 +11,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $setting["alias"]->setting_value }} - Airwaybill</h1>
+                    <h1>{{ $setting["alias"]->setting_value }} - Deposit</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('homes') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Airwaybill Management</li>
+                    <li class="breadcrumb-item active">Deposit Management</li>
                     </ol>
                 </div>
                 </div>
@@ -29,23 +29,23 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">{{ $setting["alias"]->setting_value }} - Airwaybill</h3>
+                                <h3 class="card-title">{{ $setting["alias"]->setting_value }} - Deposit</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 mb-2">
-                                        <a href="{{ route('create-airwaybill') }}" class="btn btn-outline-success float-right"><i class="fa fa-plus-circle"></i> Add Airwaybill</a>
+                                        <a href="{{ route('create-deposit') }}" class="btn btn-outline-success float-right"><i class="fa fa-plus-circle"></i> Add Deposit</a>
                                     </div>
                                 </div>
-                                <table id="airwaybill-table" class="table table-bordered table-striped" width="100%">
+                                <table id="deposit-table" class="table table-bordered table-striped" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Date</th>
-                                            <th>Description</th>
-                                            <th>Acceptance</th>
-                                            <th>Origin</th>
-                                            <th>Destination</th>
+                                            <th>Agent</th>
+                                            <th>Amount</th>
+                                            <th>Proof</th>
+                                            <th>Note</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -76,19 +76,32 @@
 @section('script-js')
     <script>
     $(function () {
-        $('#airwaybill-table').DataTable({
+        $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        });
+        $('#deposit-table').DataTable({
             "responsive": true,
             "autoWidth": true,
             "processing": true,
             "serverSide": true,
-            "ajax": "{{ route('airwaybill-data') }}",
+            "ajax": "{{ route('deposit-data') }}",
             "columns": [
-                {data: 'awb_code', name: 'awb_code'},
-                {data: 'created_at', name: 'created_at'},
-                {data: 'description', name: 'description'},
-                {data: 'acceptance_method', name: 'acceptance_method'},
-                {data: 'origin_name', name: 'origin_name'},
-                {data: 'destination_name', name: 'destination_name'},
+                {data: 'deposit_code', name: 'deposit_code'},
+                {data: 'agent_id', id: 'agent_id'},
+                {data: 'deposit_amount', name: 'deposit_amount'},
+                {data: 'deposit_proof', name: 'deposit_proof'},
+                {data: 'deposit_note', name: 'deposit_note'},
+                {data: 'deposit_status', name: 'deposit_status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         })

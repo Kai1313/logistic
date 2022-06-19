@@ -7,6 +7,7 @@ use App\Http\Controllers\PricelistController;
 use App\Http\Controllers\AirwaybillController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DepositsController;
 use App\Http\Controllers\SettingsController;
 
 /*
@@ -78,6 +79,15 @@ Route::get('admin/manageUser/edit/{id}', [UserController::class, 'edit']
 )->name('edit-user/{id}');
 Route::post('admin/manageUser/update', [UserController::class, 'update']
 )->name('update-user');
+
+Route::prefix('admin')->group(function () {
+    Route::prefix('deposit')->group(function () {
+        Route::get('/manage-deposit', [DepositsController::class, 'index'])->name('manage-deposit');
+        Route::get('/deposit-data', [DepositsController::class, 'depositData'])->name('deposit-data');
+        Route::get('/create', [DepositsController::class, 'create'])->name('create-deposit');
+        Route::post('/store', [DepositsController::class, 'store'])->name('store-deposit');
+    });
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

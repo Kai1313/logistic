@@ -99,7 +99,8 @@ class AirwaybillController extends Controller
     public function generateUniqueCode()
     {
         do {
-            $code = 'MTL'.date('ymd').random_int(100000, 999999);
+            $company = Setting::find('company_code');
+            $code = $company->setting_value.date('ymd').random_int(100000, 999999);
         } while (Airwaybill::where("awb_code", $code)->first());
         return $code;
     }
