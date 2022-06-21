@@ -138,10 +138,10 @@ class UserController extends Controller
     public function userData(Request $request)
     {
         // dd($request->all());
-        $user = User::orderBy('email')->get();
+        $user = User::orderBy('email');
         $user = DataTables::of($user)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/manageUser/edit/'.$row["id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="admin/user/edit/'.$row["id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])

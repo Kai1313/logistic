@@ -185,7 +185,7 @@ class PricelistController extends Controller
                         return $due;
                     })
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/managePricelist/edit/'.$row["pricelist_id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="admin/pricelist/edit/'.$row["pricelist_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['duedate', 'action'])

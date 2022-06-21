@@ -173,10 +173,10 @@ class AgentController extends Controller
     public function agentData(Request $request)
     {
         // dd($request->all());
-        $agent = Agent::orderBy('agent_code')->get();
+        $agent = Agent::orderBy('agent_code');
         $agent = DataTables::of($agent)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/manageAgent/edit/'.$row["agent_id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="admin/agent/edit/'.$row["agent_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])

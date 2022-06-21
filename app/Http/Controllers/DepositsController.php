@@ -127,10 +127,10 @@ class DepositsController extends Controller
     public function depositData(Request $request)
     {
         // dd($request->all());
-        $deposit = Deposit::orderBy('deposit_code')->get();
+        $deposit = Deposit::orderBy('deposit_code');
         $deposit = DataTables::of($deposit)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/manageDeposit/edit/'.$row["deposit_id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="admin/deposit/edit/'.$row["deposit_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])

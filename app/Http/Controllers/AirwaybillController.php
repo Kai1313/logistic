@@ -154,10 +154,10 @@ class AirwaybillController extends Controller
     public function airwaybillData(Request $request)
     {
         // dd($request->all());
-        $airwaybill = Airwaybill::orderBy('created_at', 'desc')->get();
+        $airwaybill = Airwaybill::orderBy('created_at', 'desc');
         $airwaybill = DataTables::of($airwaybill)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/manageAirwaybill/edit/'.$row["awb_id"].'" class="btn btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
