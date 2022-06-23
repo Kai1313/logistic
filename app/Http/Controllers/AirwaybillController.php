@@ -54,7 +54,7 @@ class AirwaybillController extends Controller
         try {
             $airwaybill = new Airwaybill;
             $airwaybill->awb_id = Str::uuid();
-            $airwaybill->agent_id = null;
+            $airwaybill->agent_id = $request->session()->get('agent_id');
             $airwaybill->pricelist_id = $request->pricelist;
             $airwaybill->promo_code = $request->promo_code;
             $airwaybill->payment_method = $request->payment;

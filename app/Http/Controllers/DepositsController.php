@@ -126,16 +126,60 @@ class DepositsController extends Controller
 
     public function depositData(Request $request)
     {
-        // dd($request->all());
         $deposit = Deposit::orderBy('deposit_code');
         $deposit = DataTables::of($deposit)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/deposit/edit/'.$row["deposit_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve"><i class="fas fa-edit"></i>Approve</button>';
+                        $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Void</button>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
         return $deposit;
-        // return response()->json(["dataTable"=>$pricelist]);
+    }
+
+    public function approveDeposit(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $deposit = Deposit::find($request->ids);
+            $deposit->deposit_status = 1;
+            $depoAmount = $agent->deposit_amount;
+            if (!$deposit->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to approve deposit data", "exception"=>'at update deposit status']);
+            }
+            
+            $agent = Agent::find($deposit->agent_id);
+            $depoBefore = $agent->agent_deposit;
+            $agent->agent_deposit = $depoBefore + $depoAmount;
+            if (!$agent->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to approve deposit data", "exception"=>'at update agent deposit']);
+            }
+
+            DB::commit();
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to approve deposit data", "exception"=>$e]);
+        }
+        catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(["result"=>FALSE, "message"=>"Failed to approve deposit data", "exception"=>$e]);
+        }
+    }
+
+    public function voidDeposit(Request $request)
+    {
+        try {
+            $deposit = Deposit::find($request->ids);
+            $deposit->deposit_status = 2;
+            if (!$deposit->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to void deposit data", "exception"=>'at update deposit status']);
+            }
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to void deposit data", "exception"=>$e]);
+        }
+        catch (\Exception $e) {
+            return response()->json(["result"=>FALSE, "message"=>"Failed to void deposit data", "exception"=>$e]);
+        }
     }
 }

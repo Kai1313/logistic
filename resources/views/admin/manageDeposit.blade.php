@@ -75,36 +75,40 @@
 @endsection
 @section('script-js')
     <script>
-    $(function () {
-        $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        });
-        $('#deposit-table').DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "processing": true,
-            "serverSide": true,
-            "ajax": "{{ route('deposit-data') }}",
-            "columns": [
-                {data: 'deposit_code', name: 'deposit_code'},
-                {data: 'agent_id', id: 'agent_id'},
-                {data: 'deposit_amount', name: 'deposit_amount'},
-                {data: 'deposit_proof', name: 'deposit_proof'},
-                {data: 'deposit_note', name: 'deposit_note'},
-                {data: 'deposit_status', name: 'deposit_status'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+        $(function () {
+            tables()
+
+            $(document).on("click", function() {
+                let ident = $(this).data('identifier')
+                console.log(ident)
+                // switch (ident) {
+                //     case value:
+                        
+                //         break;
+                
+                //     default:
+                //         break;
+                // }
+            })
         })
-    });
+        
+        function tables() {
+            $('#deposit-table').DataTable({
+                "responsive": true,
+                "autoWidth": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ route('deposit-data') }}",
+                "columns": [
+                    {data: 'deposit_code', name: 'deposit_code'},
+                    {data: 'agent_id', id: 'agent_id'},
+                    {data: 'deposit_amount', name: 'deposit_amount'},
+                    {data: 'deposit_proof', name: 'deposit_proof'},
+                    {data: 'deposit_note', name: 'deposit_note'},
+                    {data: 'deposit_status', name: 'deposit_status'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            })
+        }
     </script>
 @endsection
