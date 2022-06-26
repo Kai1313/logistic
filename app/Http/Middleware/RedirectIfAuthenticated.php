@@ -24,12 +24,12 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 $auth = Auth::user();
-                if ($auth->roles == -1) {
-                    return redirect()->route('homes');
-                }
-                else {
-                    return redirect(RouteServiceProvider::HOME);
-                }
+                return redirect()->route('homes');
+                // if ($auth->roles == -1) {
+                // }
+                // else {
+                //     return redirect(RouteServiceProvider::HOME);
+                // }
             }
         }
 

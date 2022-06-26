@@ -56,6 +56,7 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->contact = $request->phone;
+            $user->roles = $request->roles;
             $user->agent_id = $request->agent;
             $user->password = Hash::make('p@ssword123');
             if (!$user->save()) {
@@ -112,6 +113,7 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->contact = $request->phone;
+            $user->roles = $request->roles;
             $user->agent_id = $request->agent;
             // dd($user);
             if (!$user->save()) {
@@ -137,16 +139,14 @@ class UserController extends Controller
 
     public function userData(Request $request)
     {
-        // dd($request->all());
         $user = User::orderBy('email');
         $user = DataTables::of($user)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/user/edit/'.$row["id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="edit/'.$row["id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
         return $user;
-        // return response()->json(["dataTable"=>$pricelist]);
     }
 }

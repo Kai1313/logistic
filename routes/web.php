@@ -70,8 +70,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/deposit-data', [DepositsController::class, 'depositData'])->name('deposit-data');
         Route::get('/create', [DepositsController::class, 'create'])->name('create-deposit');
         Route::post('/store', [DepositsController::class, 'store'])->name('store-deposit');
-        Route::get('/deposit-approve', [DepositsController::class, 'approveDeposit'])->name('deposit-approve');
-        Route::get('/deposit-void', [DepositsController::class, 'voidDeposit'])->name('deposit-void');
+        Route::post('/deposit-approve', [DepositsController::class, 'approveDeposit'])->name('deposit-approve');
+        Route::post('/deposit-void', [DepositsController::class, 'voidDeposit'])->name('deposit-void');
     });
 });
 

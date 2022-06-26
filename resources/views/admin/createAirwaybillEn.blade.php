@@ -17,6 +17,7 @@
 @endsection
 @section('main-content')
 <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -30,9 +31,10 @@
             </ol>
           </div>
         </div>
-      </div>
+      </div><!-- /.container-fluid -->
     </section>
 
+    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <form id="quickForm" action="" method="POST">
@@ -41,7 +43,7 @@
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Informasi Paket</h3>
+                                <h3 class="card-title">Item Information</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -54,7 +56,7 @@
                                         <span class="h4" id="showProvince" class="capitalized">Jawa Timur</span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="">Dimensi dan Berat</label>
+                                        <label for="">Dimension and Weight</label>
                                         <br>
                                         <span class="h2" id="showLength">10cm</span>
                                         <span class="h2">x</span>
@@ -70,37 +72,37 @@
                                 <div class="row">
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Min. Biaya</label>
+                                            <label for="">Min. Cost</label>
                                             <h3 for="" id="showCost">Rp5000</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Min. Berat</label>
+                                            <label for="">Min. Weight</label>
                                             <h3 for="" id="showMinimumWeight">1kg</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Biaya</label>
+                                            <label for="">Package Cost</label>
                                             <h3 for="" id="showPackageCost">Rp5000</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Asuransi</label>
+                                            <label for="">Insurance</label>
                                             <h3 for="" id="showInsuranceCost">Rp5000</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Biaya Tambahan</label>
+                                            <label for="">Additional</label>
                                             <h3 for="" id="showAdditionalCost">Rp5000</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Biaya Kemasan</label>
+                                            <label for="">Packaging</label>
                                             <h3 for="" id="showPackagingCost">Rp5000</h3>
                                         </div>
                                     </div>
@@ -108,13 +110,13 @@
                                 <div class="row">
                                     <div class="col-md-2 col-6">
                                         <div class="form-group">
-                                            <label for="">Diskon</label>
+                                            <label for="">Discount</label>
                                             <h3 for="" id="showDiscountCost">Rp5000</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-6">
                                         <div class="form-group">
-                                            <label for="">Total Biaya</label>
+                                            <label for="">Total</label>
                                             <h1 for="" id="showTotalCost">Rp20000</h1>
                                         </div>
                                     </div>
@@ -123,25 +125,25 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Berat (Kg)</label>
+                                            <label for="">Weight (Kg)</label>
                                             <input type="text" name="weight" class="form-control" id="weight" placeholder="Airwaybill Weight (Kg)">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Panjang (cm)</label>
+                                            <label for="">Length (cm)</label>
                                             <input type="text" name="length" class="form-control" id="length" placeholder="Airwaybill Length (cm)">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Lebar (cm)</label>
+                                            <label for="">Width (cm)</label>
                                             <input type="text" name="width" class="form-control" id="width" placeholder="Airwaybill Width (cm)">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Tinggi (cm)</label>
+                                            <label for="">Height (cm)</label>
                                             <input type="text" name="height" class="form-control" id="height" placeholder="Airwaybill Height (cm)">
                                         </div>
                                     </div>
@@ -149,22 +151,22 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Kemasan</label>
+                                            <label for="">Packaging</label>
                                             <select name="packaging" id="packaging" class="form-control select2bs4" style="width: 100%;">
-                                                <option value="0">Tanpa Kemasan</option>
-                                                <option value="1">Kemasan Kayu</option>
+                                                <option value="0">Without Packaging</option>
+                                                <option value="1">Wood Packaging</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Biaya Kemasan</label>
+                                            <label for="">Packaging Cost</label>
                                             <input type="text" name="packagingCost" class="form-control" id="packagingCost" placeholder="Package Cost">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Tipe Berat</label>
+                                            <label for="">Weight Type</label>
                                             <select name="weightType" id="weightType" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="0">Normal</option>
                                                 <option value="1">Cargo</option>
@@ -192,14 +194,14 @@
                                             <div class="input-group mb-3">
                                                 <input id="pricelistShow" name="pricelistShow" type="text" class="form-control" readonly>
                                                 <div class="input-group-prepend">
-                                                  <button id="btn-find" type="button" class="btn btn-info"><i class="fa fa-search"></i> Cari</button>
+                                                  <button id="btn-find" type="button" class="btn btn-info"><i class="fa fa-search"></i> Find</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Kode Promosi</label>
+                                            <label for="">Promotion Code</label>
                                             <input type="text" name="promo_code" class="form-control" id="" placeholder="Promotion Code">
                                         </div>
                                     </div>
@@ -213,13 +215,13 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Biaya Asuransi</label>
+                                            <label for="">Insurance Cost</label>
                                             <input type="text" name="insurance" class="form-control" id="insurance" placeholder="Insurance Cost">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Biaya Tambahan</label>
+                                            <label for="">Additional Cost</label>
                                             <input type="text" name="additional" class="form-control" id="additional" placeholder="Additional Cost">
                                         </div>
                                     </div>
@@ -232,7 +234,7 @@
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Informasi Pengiriman <small></small></h3>
+                                <h3 class="card-title">Shipping Information <small></small></h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -254,7 +256,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Metode Pembayaran</label>
+                                            <label>Payment Method</label>
                                             <select name="payment" id="payment" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="0">Cash</option>
                                                 <option value="1">Credit</option>
@@ -263,7 +265,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Metode Penerimaan</label>
+                                            <label>Acceptance Method</label>
                                             <select name="acceptance" id="acceptance" class="form-control select2bs4" style="width: 100%;">
                                                 <option value="0">Non-COD</option>
                                                 <option value="1">COD</option>
@@ -279,21 +281,21 @@
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Informasi Pengirim/Penerima</h3>
+                                <h3 class="card-title">Shipper Information</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="">Nama Pengirim</label>
+                                            <label for="">Origin Name</label>
                                             <input type="text" name="originName" class="form-control" id="" placeholder="Origin Name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Kontak Pengirim</label>
+                                            <label for="">Origin Contact</label>
                                             <input type="text" name="originContact" class="form-control" id="" placeholder="Origin Contact">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Deskripsi</label>
+                                            <label for="">Origin Description</label>
                                             <textarea name="originDescription" class="form-control" rows="3" placeholder="Origin Description ..."></textarea>
                                         </div>
                                     </div>
@@ -313,15 +315,15 @@
                                     </div> --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="">Nama Penerima</label>
+                                            <label for="">Destination Name</label>
                                             <input type="text" name="destinationName" class="form-control" id="" placeholder="Destination Name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Kontak Penerima</label>
+                                            <label for="">Destination Contact</label>
                                             <input type="text" name="destinationContact" class="form-control" id="" placeholder="Destination Contact">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Deskripsi</label>
+                                            <label for="">Destination Description</label>
                                             <textarea name="destinationDescription" class="form-control" rows="3" placeholder="Destination Description ..."></textarea>
                                         </div>
                                     </div>
@@ -329,7 +331,7 @@
                             </div>
                             <div class="card-footer float-right">
                                 <button id="btn-print" type="button" class="btn btn-outline-success float-right" disabled><i class="fas fa-print"></i> Print</button>
-                                <button type="submit" class="btn btn-primary float-right mr-1">Simpan</button>
+                                <button type="submit" class="btn btn-primary float-right mr-1">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -610,10 +612,10 @@
                     })
                 }
             },
-            error: function(e) {
+            error: function() {
                 Swal.fire({
                     title: 'Failed!',
-                    text: e.message,
+                    text: data.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })

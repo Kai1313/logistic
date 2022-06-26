@@ -47,8 +47,19 @@
                                     <select name="agent" id="agent" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Agent</option>
                                         @foreach ($agents as $agent)
-                                            <option value="{{ $agent->agent_id }}" {{ ($user->id == $agent->agent_id) ? 'selected' : '' }}>{{ $agent->agent_name }}</option>
+                                            <option value="{{ $agent->agent_id }}" {{ ($user->agent_id == $agent->agent_id) ? 'selected' : '' }}>{{ $agent->agent_name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Roles</label>
+                                    <select name="roles" id="roles" class="form-control select2bs4">
+                                        <option value="">Pick Roles</option>
+                                        @if (session()->get('roles') == -1)
+                                        <option value="-1" {{ ($user->roles == -1)?'selected':'' }}>Super Admin</option>
+                                        @endif
+                                        <option value="0" {{ ($user->roles == 0)?'selected':'' }}>Admin</option>
+                                        <option value="1" {{ ($user->roles == 1)?'selected':'' }}>Regular</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -193,11 +204,7 @@
                         text: data.message,
                         icon: 'error',
                         confirmButtonText: 'OK'
-                    })Swal.fire(
-                        'Ooopss!',
-                        data.message,
-                        'error'
-                    )
+                    })
                 }
             },
             error: function() {

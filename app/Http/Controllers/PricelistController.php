@@ -177,8 +177,9 @@ class PricelistController extends Controller
 
     public function pricelistData(Request $request)
     {
-        // dd($request->all());
-        $pricelist = Pricelist::orderBy('pricelist_code')->get();
+        $pricelist = Pricelist::select('pricelists.*', 'provinces.name as province_name', 'regencies.name as regency_name')->orderBy('pricelist_code')
+                    ->leftjoin('provinces', 'pricelists.province', '=', 'provinces.id')
+                    ->leftjoin('regencies', 'pricelists.regency', '=', 'regencies.id');
         $pricelist = DataTables::of($pricelist)
                     ->addColumn('duedate', function($row){
                         $due = $row["pricelist_minimum_duedate"].' - '.$row["pricelist_maximum_duedate"];
@@ -191,7 +192,6 @@ class PricelistController extends Controller
                     ->rawColumns(['duedate', 'action'])
                     ->make(true);
         return $pricelist;
-        // return response()->json(["dataTable"=>$pricelist]);
     }
 
     public function pricelistFind(Request $request)

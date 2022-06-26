@@ -129,8 +129,8 @@
             "ajax": "{{ route('pricelist-data') }}",
             "columns": [
                 {data: 'pricelist_code', name: 'pricelist_code'},
-                {data: 'province', name: 'province'},
-                {data: 'regency', name: 'regency'},
+                {data: 'province_name', name: 'province_name', orderable: false, searchable: false},
+                {data: 'regency_name', name: 'regency_name', orderable: false, searchable: false},
                 {data: 'pricelist_destination', name: 'pricelist_destination'},
                 {data: 'pricelist_type', name: 'pricelist_type'},
                 {data: 'pricelist_price', name: 'pricelist_price'},

@@ -33,7 +33,7 @@ class DepositsController extends Controller
      */
     public function create()
     {
-        $agents = Agent::where('agent_type', 0)->orderBy('agent_name')->get();
+        $agents = (session()->get('agent_type') < 0 )?Agent::where('agent_type', 0)->orderBy('agent_name')->get():Agent::where('agent_id', session()->get('agent_id'))->orderBy('agent_name')->get();
         $setting = [
             "alias"=>Setting::find('company_alias'),
         ];
@@ -60,6 +60,7 @@ class DepositsController extends Controller
             $file = Str::uuid().'-'.time().'.'.$request->proof->extension();
             $request->proof->move(public_path('assets/images/deposit-proof'), $file);
             $deposit->deposit_proof = $file;
+            $deposit->created_by = session()->get('user_id');
             $deposit->deposit_code = $this->generateUniqueCode();
             if (!$deposit->save()) {
                 return response()->json(["result"=>FALSE, "message"=>"Failed to store deposit data"]);
@@ -126,15 +127,66 @@ class DepositsController extends Controller
 
     public function depositData(Request $request)
     {
-        $deposit = Deposit::orderBy('deposit_code');
-        $deposit = DataTables::of($deposit)
-                    ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve"><i class="fas fa-edit"></i>Approve</button>';
-                        $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Void</button>';
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+        if (session()->get('agent_type') < 0) {
+            $deposit = Deposit::orderBy('deposit_code');
+            $deposit = DataTables::of($deposit)
+                        ->addColumn('status', function($row){
+                            switch ($row["deposit_status"]) {
+                                case 1:
+                                    $btn = '<button type="button" class="btn btn-sm btn-success">Approved</button>';
+                                    break;
+                                case 2:
+                                    $btn = '<button type="button" class="btn btn-sm btn-warning">Void</button>';
+                                    break;                                
+                                default:
+                                    $btn = '<button type="button" class="btn btn-sm btn-default">Confirmation</button>';
+                                    break;
+                            }
+                            return $btn;
+                        })
+                        ->addColumn('action', function($row){
+                            if (session()->get('agent_type') < 0) {
+                                $btn = '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve" '.(($row["deposit_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Approve</button>';
+                                $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void" '.(($row["deposit_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Void</button>';
+                            }
+                            else {
+                                $btn = '<a href="'.$row["deposit_id"].'" class="btn btn-sm btn-info mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Check</a>';
+                            }
+                            return $btn;
+                        })
+                        ->rawColumns(['status', 'action'])
+                        ->make(true);
+        }
+        else {
+            $deposit = Deposit::orderBy('deposit_code')->where('agent_id', session()->get('agent_id'));
+            $deposit = DataTables::of($deposit)
+                        ->addColumn('status', function($row){
+                            switch ($row["deposit_status"]) {
+                                case 1:
+                                    $btn = '<button type="button" class="btn btn-sm btn-success">Approved</button>';
+                                    break;
+                                case 2:
+                                    $btn = '<button type="button" class="btn btn-sm btn-warning">Void</button>';
+                                    break;                                
+                                default:
+                                    $btn = '<button type="button" class="btn btn-sm btn-default">Confirmation</button>';
+                                    break;
+                            }
+                            return $btn;
+                        })
+                        ->addColumn('action', function($row){
+                            if (session()->get('agent_type') < 0) {
+                                $btn = '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve"><i class="fas fa-edit"></i>Approve</button>';
+                                $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Void</button>';
+                            }
+                            else {
+                                $btn = '<a href="'.$row["deposit_id"].'" class="btn btn-sm btn-info mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Check</a>';
+                            }
+                            return $btn;
+                        })
+                        ->rawColumns(['status', 'action'])
+                        ->make(true);
+        }
         return $deposit;
     }
 
@@ -144,12 +196,13 @@ class DepositsController extends Controller
             DB::beginTransaction();
             $deposit = Deposit::find($request->ids);
             $deposit->deposit_status = 1;
-            $depoAmount = $agent->deposit_amount;
+            $depoAmount = $deposit->deposit_amount;
+            $deposit->modified_by = session()->get('user_id');
             if (!$deposit->save()) {
                 DB::rollback();
                 return response()->json(["result"=>FALSE, "message"=>"Failed to approve deposit data", "exception"=>'at update deposit status']);
             }
-            
+
             $agent = Agent::find($deposit->agent_id);
             $depoBefore = $agent->agent_deposit;
             $agent->agent_deposit = $depoBefore + $depoAmount;
@@ -159,7 +212,7 @@ class DepositsController extends Controller
             }
 
             DB::commit();
-            return response()->json(["result"=>TRUE, "message"=>"Successfully to approve deposit data", "exception"=>$e]);
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to approve deposit data"]);
         }
         catch (\Exception $e) {
             DB::rollback();
@@ -172,13 +225,15 @@ class DepositsController extends Controller
         try {
             $deposit = Deposit::find($request->ids);
             $deposit->deposit_status = 2;
+            $deposit->modified_by = session()->get('user_id');
             if (!$deposit->save()) {
                 DB::rollback();
                 return response()->json(["result"=>FALSE, "message"=>"Failed to void deposit data", "exception"=>'at update deposit status']);
             }
-            return response()->json(["result"=>TRUE, "message"=>"Successfully to void deposit data", "exception"=>$e]);
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to void deposit data"]);
         }
         catch (\Exception $e) {
+            \Log::info($e);
             return response()->json(["result"=>FALSE, "message"=>"Failed to void deposit data", "exception"=>$e]);
         }
     }

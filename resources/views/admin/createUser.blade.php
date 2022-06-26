@@ -51,6 +51,17 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Roles</label>
+                                    <select name="roles" id="roles" class="form-control select2bs4">
+                                        <option value="">Pick Roles</option>
+                                        @if (session()->get('roles') == -1)
+                                        <option value="-1">Super Admin</option>
+                                        @endif
+                                        <option value="0">Admin</option>
+                                        <option value="1">Regular</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="">Email</label>
                                     <input type="text" name="email" class="form-control" id="" placeholder="User Email">
                                 </div>

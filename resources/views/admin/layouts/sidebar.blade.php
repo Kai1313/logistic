@@ -8,7 +8,7 @@
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ">
+    <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
       {{-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -111,10 +111,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('assets/lte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('assets/images/user/default-white.png') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ session()->get('user_name') }}</a>
         </div>
       </div>
 
@@ -135,8 +135,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item {{ request()->is('homes') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ request()->is('homes') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('/') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard Pages
@@ -145,59 +145,63 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->is('homes') ? 'active' : '' }}">
+                <a href="{{ route('homes') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('signout') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Logout</p>
                 </a>
               </li>
             </ul>
           </li>
+          @if (session()->get('agent_type') < 0)
           <li class="nav-item">
-            <a href="{{ route('manage-agent') }}" class="nav-link {{ request()->is('manage-agent') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="{{ route('manage-agent') }}" class="nav-link {{ request()->is('admin/agent/*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-user-tie"></i>
               <p>
                 Manage Agent
               </p>
             </a>
           </li>
+          @endif          
           <li class="nav-item">
-            <a href="{{ route('manage-airwaybill') }}" class="nav-link {{ request()->is('manage-airwaybill') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="{{ route('manage-airwaybill') }}" class="nav-link {{ request()->is('admin/airwaybill/*') ? 'active' : '' }}">
+              <i class="nav-icon far fa-file-alt"></i>
               <p>
                 Manage Airwaybill
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('manage-pricelist') }}" class="nav-link {{ request()->is('manage-pricelist') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="{{ route('manage-deposit') }}" class="nav-link {{ request()->is('admin/deposit/*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-wallet"></i>
+              <p>
+                Manage Deposit
+              </p>
+            </a>
+          </li>
+          @if (session()->get('agent_type') < 0)
+          <li class="nav-item">
+            <a href="{{ route('manage-pricelist') }}" class="nav-link {{ request()->is('admin/pricelist/*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-money-check-alt"></i>
               <p>
                 Manage Pricelist
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('manage-user') }}" class="nav-link {{ request()->is('manage-user') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="{{ route('manage-user') }}" class="nav-link {{ request()->is('admin/user/*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-users"></i>
               <p>
                 Manage User
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('manage-deposit') }}" class="nav-link {{ request()->is('manage-deposit') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage Deposit
-              </p>
-            </a>
-          </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

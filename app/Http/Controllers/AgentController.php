@@ -172,7 +172,6 @@ class AgentController extends Controller
 
     public function agentData(Request $request)
     {
-        // dd($request->all());
         $agent = Agent::orderBy('agent_code');
         $agent = DataTables::of($agent)
                     ->addColumn('action', function($row){
@@ -182,6 +181,5 @@ class AgentController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         return $agent;
-        // return response()->json(["dataTable"=>$pricelist]);
     }
 }

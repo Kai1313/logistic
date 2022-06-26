@@ -45,8 +45,8 @@
                                             <th>Amount</th>
                                             <th>Proof</th>
                                             <th>Note</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th style="width: 15%;">Status</th>
+                                            <th style="width: 15%;">Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -76,24 +76,7 @@
 @section('script-js')
     <script>
         $(function () {
-            tables()
-
-            $(document).on("click", function() {
-                let ident = $(this).data('identifier')
-                console.log(ident)
-                // switch (ident) {
-                //     case value:
-                        
-                //         break;
-                
-                //     default:
-                //         break;
-                // }
-            })
-        })
-        
-        function tables() {
-            $('#deposit-table').DataTable({
+            var tables = $('#deposit-table').DataTable({
                 "responsive": true,
                 "autoWidth": true,
                 "processing": true,
@@ -105,9 +88,93 @@
                     {data: 'deposit_amount', name: 'deposit_amount'},
                     {data: 'deposit_proof', name: 'deposit_proof'},
                     {data: 'deposit_note', name: 'deposit_note'},
-                    {data: 'deposit_status', name: 'deposit_status'},
+                    // {data: 'deposit_status', name: 'deposit_status'},
+                    {data: 'status', name: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
+            })
+
+            $(document).on("click", ".btn-void, .btn-approve", function() {
+                let ident = $(this).data('identifier')
+                let ids = $(this).data('id')
+                console.log(ident)
+                switch (ident) {
+                    case 'btn-approve':
+                        approveDeposit(ids)
+                        break;
+                
+                    default:
+                        voidDeposit(ids)
+                        break;
+                }
+            })
+        })
+
+        function approveDeposit(ids) {
+            $.ajax({
+                url: "{{ route('deposit-approve') }}",
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}', ids: ids},
+                success: function (data) {
+                    if (data.result) {
+                        $('#deposit-table').DataTable().ajax.reload()
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Oooopsss!',
+                        'Something goes wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
+
+        function voidDeposit(ids) {
+            $.ajax({
+                url: "{{ route('deposit-void') }}",
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}', ids: ids},
+                success: function (data) {
+                    if (data.result) {
+                        $('#deposit-table').DataTable().ajax.reload()
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Oooopsss!',
+                        'Something goes wrong!',
+                        'error'
+                    )
+                }
             })
         }
     </script>

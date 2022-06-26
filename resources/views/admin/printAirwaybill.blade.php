@@ -73,6 +73,9 @@
         .bold {
             font-weight: 900;
         }
+        .valigncenter {
+            vertical-align: middle !important;
+        }
         @page {
             size: 74mm 52mm;
             margin: 0;
@@ -109,7 +112,7 @@
                             <td class="w-3">
                                 <img src="{{ asset($logo) }}" alt="" srcset="" width="100%" style="margin: auto; display: block;">
                             </td>
-                            <td colspan="5" class="w-9">
+                            <td colspan="5" class="w-9 valigncenter">
                                 <div class="header-barcode">
                                     <span><img class="center" src="data:image/png;base64, {{ DNS1D::getBarcodePNG($awb->awb_code, 'C128') }}" alt="barcode" width="60%" /></span>
                                 </div>

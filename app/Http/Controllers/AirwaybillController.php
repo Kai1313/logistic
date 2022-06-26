@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Airwaybill;
 use App\Models\Pricelist;
+use App\Models\Deposit;
+use App\Models\Agent;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -52,6 +54,22 @@ class AirwaybillController extends Controller
     {
         // dd($request->all());
         try {
+            DB::beginTransaction();
+            //Check deposit if agents
+            $current = Agent::find(session()->get('agent_id'));
+            $currentDepo = (float)$current->agent_deposit;
+            $totalCost = (float)($request->weight*$request->hiddenPricelist+($request->packagingCost+$request->insurance+$request->additional-$request->discount));
+            if ($current->agent_type >= 0) {
+                if ($currentDepo < $totalCost) {
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Insufficient Deposit"]);
+                }
+                // Decrease deposit
+                $current->agent_deposit = $currentDepo - $totalCost;
+                if (!$current->save()) {
+                    DB::rollback();
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Error when decreasing deposit"]);
+                }
+            }
             $airwaybill = new Airwaybill;
             $airwaybill->awb_id = Str::uuid();
             $airwaybill->agent_id = $request->session()->get('agent_id');
@@ -83,15 +101,20 @@ class AirwaybillController extends Controller
             $airwaybill->destination_contact = $request->destinationContact;
             $airwaybill->destination_description = $request->destinationDescription;
             $airwaybill->awb_status = 1;
+            $airwaybill->created_by = session()->get('user_id');
             $airwaybill->awb_code = $this->generateUniqueCode();
             $codes = $airwaybill->awb_id;
             // dd($codes);
             if (!$airwaybill->save()) {
+                DB::rollback();
                 return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data"]);
             }
+            
+            DB::commit();
             return response()->json(["result"=>TRUE, "message"=>"Successfully store airwaybill data", "airwaybill"=>$codes]);
         } 
         catch (\Exception $e) {
+            DB::rollback();
             return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data", "exception"=>$e]);
         }        
     }
@@ -153,15 +176,26 @@ class AirwaybillController extends Controller
 
     public function airwaybillData(Request $request)
     {
-        // dd($request->all());
-        $airwaybill = Airwaybill::orderBy('created_at', 'desc');
-        $airwaybill = DataTables::of($airwaybill)
-                    ->addColumn('action', function($row){
-                        $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+        if (session()->get('agent_type') < 0) {
+            $airwaybill = Airwaybill::orderBy('created_at', 'desc');
+            $airwaybill = DataTables::of($airwaybill)
+                        ->addColumn('action', function($row){
+                            $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
+                            return $btn;
+                        })
+                        ->rawColumns(['action'])
+                        ->make(true);            
+        }
+        else {
+            $airwaybill = Airwaybill::orderBy('created_at', 'desc')->where('agent_id', session()->get('agent_id'));
+            $airwaybill = DataTables::of($airwaybill)
+                        ->addColumn('action', function($row){
+                            $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
+                            return $btn;
+                        })
+                        ->rawColumns(['action'])
+                        ->make(true);
+        }
         return $airwaybill;
     }
 
