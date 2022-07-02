@@ -6,6 +6,8 @@ use App\Models\Airwaybill;
 use App\Models\Pricelist;
 use App\Models\Deposit;
 use App\Models\Agent;
+use App\Models\Invoice;
+use App\Models\Subscribe;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -55,21 +57,6 @@ class AirwaybillController extends Controller
         // dd($request->all());
         try {
             DB::beginTransaction();
-            //Check deposit if agents
-            $current = Agent::find(session()->get('agent_id'));
-            $currentDepo = (float)$current->agent_deposit;
-            $totalCost = (float)($request->weight*$request->hiddenPricelist+($request->packagingCost+$request->insurance+$request->additional-$request->discount));
-            if ($current->agent_type >= 0) {
-                if ($currentDepo < $totalCost) {
-                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Insufficient Deposit"]);
-                }
-                // Decrease deposit
-                $current->agent_deposit = $currentDepo - $totalCost;
-                if (!$current->save()) {
-                    DB::rollback();
-                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Error when decreasing deposit"]);
-                }
-            }
             $airwaybill = new Airwaybill;
             $airwaybill->awb_id = Str::uuid();
             $airwaybill->agent_id = $request->session()->get('agent_id');
@@ -104,6 +91,39 @@ class AirwaybillController extends Controller
             $airwaybill->created_by = session()->get('user_id');
             $airwaybill->awb_code = $this->generateUniqueCode();
             $codes = $airwaybill->awb_id;
+            // Check deposit if agents
+            $current = Agent::find(session()->get('agent_id'));
+            if ($current->agent_type >= 0) {
+                $currentDepo = (float)$current->agent_deposit;
+                $totalCost = (float)($request->weight*$request->hiddenPricelist+($request->packagingCost+$request->insurance+$request->additional-$request->discount));
+                // Get sharing profit
+                $subs = Subscribe::find($current->subs_id);
+                $sharing = (!is_null($subs->sharing_profit))?$subs->sharing_profit:0;
+                $sharingAmount = (float) $totalCost*$sharing/100;
+                if ($currentDepo < $totalCost) {
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Insufficient Deposit"]);
+                }
+                // Decrease deposit
+                $current->agent_deposit = $currentDepo - ($totalCost - $sharingAmount);
+                if (!$current->save()) {
+                    DB::rollback();
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Error when decreasing deposit"]);
+                }
+                // Create invoice
+                $invoice = new Invoice;
+                $invoice->invoice_code = $this->generateUniqueInvoiceCode();
+                $invoice->awb_id = $airwaybill->awb_id;
+                $invoice->invoice_date = date('y-m-d');
+                $invoice->invoice_information = 'Invoice untuk resi : '.$airwaybill->awb_code;
+                $invoice->invoice_amount = $totalCost;
+                $invoice->invoice_tax = 0;
+                $invoice->invoice_total = $totalCost + 0;
+                $invoice->invoice_status = 1;
+                if (!$invoice->save()) {
+                    DB::rollback();
+                    return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data. Error when creating invoice"]);
+                }
+            }
             // dd($codes);
             if (!$airwaybill->save()) {
                 DB::rollback();
@@ -115,6 +135,7 @@ class AirwaybillController extends Controller
         } 
         catch (\Exception $e) {
             DB::rollback();
+            \Log::info($e);
             return response()->json(["result"=>FALSE, "message"=>"Failed to store airwaybill data", "exception"=>$e]);
         }        
     }
@@ -128,6 +149,13 @@ class AirwaybillController extends Controller
         return $code;
     }
 
+    public function generateUniqueInvoiceCode()
+    {
+        do {
+            $code = 'INV-'.date('ymd').random_int(100000, 999999);
+        } while (Invoice::where("invoice_code", $code)->first());
+        return $code;
+    }
 
     /**
      * Display the specified resource.
@@ -179,21 +207,29 @@ class AirwaybillController extends Controller
         if (session()->get('agent_type') < 0) {
             $airwaybill = Airwaybill::orderBy('created_at', 'desc');
             $airwaybill = DataTables::of($airwaybill)
+                        ->addColumn('acceptance', function($row){
+                            $acp = ($row["acceptance_method"] == 0)?'Non-COD':'COD';
+                            return $acp;
+                        })
                         ->addColumn('action', function($row){
                             $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
                             return $btn;
                         })
-                        ->rawColumns(['action'])
+                        ->rawColumns(['acceptance', 'action'])
                         ->make(true);            
         }
         else {
             $airwaybill = Airwaybill::orderBy('created_at', 'desc')->where('agent_id', session()->get('agent_id'));
             $airwaybill = DataTables::of($airwaybill)
+                        ->addColumn('acceptance', function($row){
+                            $acp = ($row["acceptance_method"] == 0)?'Non-COD':'COD';
+                            return $acp;
+                        })
                         ->addColumn('action', function($row){
                             $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
                             return $btn;
                         })
-                        ->rawColumns(['action'])
+                        ->rawColumns(['acceptance', 'action'])
                         ->make(true);
         }
         return $airwaybill;

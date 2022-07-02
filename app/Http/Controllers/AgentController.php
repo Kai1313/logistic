@@ -7,6 +7,7 @@ use App\Models\Province;
 use App\Models\Regency;
 use App\Models\District;
 use App\Models\Village;
+use App\Models\Subscribe;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,6 +41,7 @@ class AgentController extends Controller
         $regencies = Regency::orderBy('name')->get();
         $districts = District::orderBy('name')->get();
         $villages = Village::orderBy('name')->get();
+        $subscribes = Subscribe::orderBy('subs_code')->get();
         $setting = [
             "alias"=>Setting::find('company_alias'),
         ];
@@ -48,7 +50,8 @@ class AgentController extends Controller
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)
                 ->with('districts', $districts)
-                ->with('villages', $villages);
+                ->with('villages', $villages)
+                ->with('subscribes', $subscribes);
     }
 
     /**
@@ -65,6 +68,7 @@ class AgentController extends Controller
             $agent->agent_id = Str::uuid();
             $agent->agent_name = $request->name;
             $agent->agent_type = $request->type;
+            $agent->subs_id = $request->subscribe;
             $agent->province = $request->province;
             $agent->regency = $request->regency;
             $agent->district = $request->district;
@@ -116,6 +120,7 @@ class AgentController extends Controller
         $regencies = Regency::where('province_id', $agent->province)->orderBy('name')->get();
         $districts = District::where('regency_id', $agent->regency)->orderBy('name')->get();
         $villages = Village::where('district_id', $agent->district)->orderBy('name')->get();
+        $subscribes = Subscribe::orderBy('subs_code')->get();
         $setting = [
             "alias"=>Setting::find('company_alias'),
         ];
@@ -125,7 +130,8 @@ class AgentController extends Controller
                 ->with('provinces', $provinces)
                 ->with('regencies', $regencies)
                 ->with('districts', $districts)
-                ->with('villages', $villages);
+                ->with('villages', $villages)
+                ->with('subscribes', $subscribes);
     }
 
     /**
@@ -141,6 +147,7 @@ class AgentController extends Controller
             $agent = Agent::find($request->ids);
             $agent->agent_name = $request->name;
             $agent->agent_type = $request->type;
+            $agent->subs_id = $request->subscribe;
             $agent->province = $request->province;
             $agent->regency = $request->regency;
             $agent->district = $request->district;
@@ -175,7 +182,7 @@ class AgentController extends Controller
         $agent = Agent::orderBy('agent_code');
         $agent = DataTables::of($agent)
                     ->addColumn('action', function($row){
-                        $btn = '<a href="admin/agent/edit/'.$row["agent_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+                        $btn = '<a href="edit/'.$row["agent_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])

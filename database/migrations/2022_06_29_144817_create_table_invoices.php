@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('invoice_id');
-            $table->char('invoice_code', 36);
-            $table->char('airwaybill_id', 36);
+            $table->char('invoice_code', 36)->unique();
+            $table->char('awb_id', 36);
             $table->date('invoice_date');
             $table->text('invoice_information');
             $table->decimal('invoice_amount', $precision = 10, $scale = 2)->default(0);

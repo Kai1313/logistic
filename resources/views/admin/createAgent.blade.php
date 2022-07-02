@@ -50,6 +50,15 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Subscribes</label>
+                                    <select name="subscribe" id="subscribe" class="form-control select2bs4" style="width: 100%;">
+                                        <option value="">Pick Subs</option>
+                                        @foreach ($subscribes as $subscribe)
+                                            <option value="{{ $subscribe->id }}">{{ $subscribe->subs_code }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="">Province</label>
                                     <select name="province" id="province" class="form-control select2bs4" style="width: 100%;">
                                         <option value="">Pick Province</option>

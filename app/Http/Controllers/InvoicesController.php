@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
-use App\Models\Agent;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
-class SettingsController extends Controller
+class InvoicesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +14,7 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $setting = [
-            "alias"=>Setting::find('company_alias'),
-        ];
-        $agent = Agent::find(session()->get('agent_id'));
-        return view('admin/dashboard')
-                ->with("agent", $agent)
-                ->with("setting", $setting);
+        //
     }
 
     /**
@@ -48,10 +41,10 @@ class SettingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Setting $setting)
+    public function show(Invoice $invoice)
     {
         //
     }
@@ -59,10 +52,10 @@ class SettingsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function edit(Setting $setting)
+    public function edit(Invoice $invoice)
     {
         //
     }
@@ -71,10 +64,10 @@ class SettingsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request, Invoice $invoice)
     {
         //
     }
@@ -82,10 +75,10 @@ class SettingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Setting $setting)
+    public function destroy(Invoice $invoice)
     {
         //
     }

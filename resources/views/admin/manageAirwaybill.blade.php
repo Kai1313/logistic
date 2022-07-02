@@ -86,7 +86,7 @@
                 {data: 'awb_code', name: 'awb_code'},
                 {data: 'created_at', name: 'created_at'},
                 {data: 'description', name: 'description'},
-                {data: 'acceptance_method', name: 'acceptance_method'},
+                {data: 'acceptance', name: 'acceptance', orderable: false, searchable: false},
                 {data: 'origin_name', name: 'origin_name'},
                 {data: 'destination_name', name: 'destination_name'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},

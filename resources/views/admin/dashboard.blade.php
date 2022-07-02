@@ -72,7 +72,7 @@
                   <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
                   <div class="info-box-content">
                     <span class="info-box-text">Deposit</span>
-                    <span class="info-box-number">{{ number_format(session()->get('agent_deposit'), 2) }}</span>
+                    <span class="info-box-number">{{ number_format($agent->agent_deposit, 2) }}</span>
                   </div>
                 </div>
               </div>
