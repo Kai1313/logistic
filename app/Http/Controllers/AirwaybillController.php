@@ -212,7 +212,8 @@ class AirwaybillController extends Controller
                             return $acp;
                         })
                         ->addColumn('action', function($row){
-                            $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
+                            $btn = '<a href="print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Print</a>';
+                            $btn .= '<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
                             return $btn;
                         })
                         ->rawColumns(['acceptance', 'action'])
@@ -226,7 +227,8 @@ class AirwaybillController extends Controller
                             return $acp;
                         })
                         ->addColumn('action', function($row){
-                            $btn = '<a href="admin/airwaybill/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-print"></i> Print</a>';
+                            $btn = '<a href="print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Print</a>';
+                            $btn .= '<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
                             return $btn;
                         })
                         ->rawColumns(['acceptance', 'action'])

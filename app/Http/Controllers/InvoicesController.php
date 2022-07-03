@@ -44,9 +44,9 @@ class InvoicesController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoice $invoice)
+    public function show(Request $request)
     {
-        //
+        return view('admin/printInvoice');
     }
 
     /**

@@ -139,7 +139,7 @@ class UserController extends Controller
 
     public function userData(Request $request)
     {
-        $user = User::orderBy('email');
+        $user = User::select('users.id', 'users.name', 'users.email', 'users.contact', 'agents.agent_name')->orderBy('users.email')->join('agents', 'agents.agent_id', 'users.agent_id');
         $user = DataTables::of($user)
                     ->addColumn('action', function($row){
                         $btn = '<a href="edit/'.$row["id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';

@@ -94,10 +94,10 @@
             "serverSide": true,
             "ajax": "{{ route('user-data') }}",
             "columns": [
-                {data: 'name', name: 'name'},
-                {data: 'contact', name: 'contact'},
-                {data: 'email', name: 'email'},
-                {data: 'agent_id', name: 'agent_id'},
+                {data: 'name', name: 'users.name'},
+                {data: 'contact', name: 'users.contact'},
+                {data: 'email', name: 'users.email'},
+                {data: 'agent_name', name: 'agents.agent_name'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         })

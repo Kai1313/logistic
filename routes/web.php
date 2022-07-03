@@ -8,6 +8,7 @@ use App\Http\Controllers\AirwaybillController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepositsController;
+use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\SettingsController;
 
 /*
@@ -20,8 +21,11 @@ use App\Http\Controllers\SettingsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function() {
+    return view('main/index');
+});
 
-Route::get('/', [SettingsController::class, 'index'])->middleware(['auth'])->name('homes');
+Route::get('/dash', [SettingsController::class, 'index'])->middleware(['auth'])->name('homes');
 
 Route::prefix('admin')->group(function () {
     Route::prefix('pricelist')->group(function () {
@@ -45,7 +49,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/create', [AirwaybillController::class, 'create'])->name('create-airwaybill');
         Route::post('/store', [AirwaybillController::class, 'store'])->name('store-airwaybill');
         Route::get('/print/{ids}', [AirwaybillController::class, 'print'])->name('print-airwaybill');
-    });
+    }
+);
 
     Route::prefix('agent')->group(function () {
         Route::get('/manage-agent', [AgentController::class, 'index'])->name('manage-agent');
@@ -72,6 +77,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/store', [DepositsController::class, 'store'])->name('store-deposit');
         Route::post('/deposit-approve', [DepositsController::class, 'approveDeposit'])->name('deposit-approve');
         Route::post('/deposit-void', [DepositsController::class, 'voidDeposit'])->name('deposit-void');
+    });
+
+    Route::prefix('invoice')->group(function () {
+        Route::get('/print/{id}', [InvoicesController::class, 'show'])->name('invoice-print');
     });
 });
 
