@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
+use App\Models\Airwaybill;
 use App\Models\Invoice;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class InvoicesController extends Controller
@@ -44,9 +47,22 @@ class InvoicesController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Request $request, $ids)
     {
-        return view('admin/printInvoice');
+        $setting = [
+            "alias"=>Setting::find('company_alias'),
+            "name"=>Setting::find('company_name'),
+            "address"=>Setting::find('company_address'),
+            "phone"=>Setting::find('company_phone'),
+        ];
+        $invoice = Invoice::where('awb_id', $ids)->first();
+        $airwaybill = Airwaybill::find($ids);
+        $agent = Agent::find($airwaybill->agent_id);
+        return view('admin/printInvoice')
+                ->with('invoice', $invoice)
+                ->with('agent', $agent)
+                ->with('airwaybill', $airwaybill)
+                ->with('setting', $setting);
     }
 
     /**

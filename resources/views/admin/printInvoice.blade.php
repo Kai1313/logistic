@@ -18,8 +18,8 @@
       <div class="row">
         <div class="col-12">
           <h2 class="page-header">
-            <i class="fas fa-globe"></i> AdminLTE, Inc.
-            <small class="float-right">Date: 2/10/2014</small>
+            <i class="fas fa-globe"></i> {{ $setting["name"]->setting_value }}
+            <small class="float-right">Date: {{ date('d/m/Y', strtotime($invoice->invoice_date)) }}</small>
           </h2>
         </div>
       </div>
@@ -27,29 +27,27 @@
         <div class="col-sm-4 invoice-col">
           From
           <address>
-            <strong>Admin, Inc.</strong><br>
-            795 Folsom Ave, Suite 600<br>
-            San Francisco, CA 94107<br>
-            Phone: (804) 123-5432<br>
-            Email: info@almasaeedstudio.com
+            <strong>{{ $setting["name"]->setting_value }}</strong><br>
+            {{ $setting["address"]->setting_value }}<br>
+            Phone: {{ $setting["phone"]->setting_value }}<br>
+            {{-- Email: info@almasaeedstudio.com --}}
           </address>
         </div>
         <div class="col-sm-4 invoice-col">
           To
           <address>
-            <strong>John Doe</strong><br>
-            795 Folsom Ave, Suite 600<br>
-            San Francisco, CA 94107<br>
-            Phone: (555) 539-1037<br>
-            Email: john.doe@example.com
+            <strong>{{ $agent->agent_name }}</strong><br>
+            {{ $agent->agent_address }}<br>
+            Phone: {{ $agent->agent_phone }}<br>
+            {{-- Email: john.doe@example.com --}}
           </address>
         </div>
         <div class="col-sm-4 invoice-col">
-          <b>Invoice #007612</b><br>
+          <b>Invoice {{ $invoice->invoice_code }}</b><br>
           <br>
-          <b>Order ID:</b> 4F3S8J<br>
+          {{-- <b>Order ID:</b> 4F3S8J<br>
           <b>Payment Due:</b> 2/22/2014<br>
-          <b>Account:</b> 968-34567
+          <b>Account:</b> 968-34567 --}}
         </div>
       </div>
 
@@ -57,43 +55,20 @@
         <div class="col-12 table-responsive">
           <table class="table table-striped">
             <thead>
-            <tr>
-              <th>Qty</th>
-              <th>Product</th>
-              <th>Serial #</th>
-              <th>Description</th>
-              <th>Subtotal</th>
-            </tr>
+              <tr>
+                <th>Qty</th>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Subtotal</th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>1</td>
-              <td>Call of Duty</td>
-              <td>455-981-221</td>
-              <td>El snort testosterone trophy driving gloves handsome</td>
-              <td>$64.50</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Need for Speed IV</td>
-              <td>247-925-726</td>
-              <td>Wes Anderson umami biodiesel</td>
-              <td>$50.00</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Monsters DVD</td>
-              <td>735-845-642</td>
-              <td>Terry Richardson helvetica tousled street art master</td>
-              <td>$10.70</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Grown Ups Blue Ray</td>
-              <td>422-568-642</td>
-              <td>Tousled lomo letterpress</td>
-              <td>$25.99</td>
-            </tr>
+              <tr>
+                <td>1</td>
+                <td>{{ $airwaybill->awb_code }}</td>
+                <td>{{ $invoice->invoice_information }}</td>
+                <td>Rp {{ $airwaybill->awb_total_cost }}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -101,7 +76,7 @@
       </div>
   
       <div class="row">
-        <div class="col-6">
+        {{-- <div class="col-6">
           <p class="lead">Payment Methods:</p>
           <img src="../../dist/img/credit/visa.png" alt="Visa">
           <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
@@ -112,27 +87,23 @@
             Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr
             jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
           </p>
-        </div>
-        <div class="col-6">
-          <p class="lead">Amount Due 2/22/2014</p>
+        </div> --}}
+        <div class="offset-6 col-6">
+          {{-- <p class="lead">Amount Due 2/22/2014</p> --}}
   
           <div class="table-responsive">
             <table class="table">
               <tr>
                 <th style="width:50%">Subtotal:</th>
-                <td>$250.30</td>
+                <td>Rp {{ number_format($invoice->invoice_amount, 2) }}</td>
               </tr>
               <tr>
-                <th>Tax (9.3%)</th>
-                <td>$10.34</td>
-              </tr>
-              <tr>
-                <th>Shipping:</th>
-                <td>$5.80</td>
+                <th>Tax (10%)</th>
+                <td>Rp 0.00</td>
               </tr>
               <tr>
                 <th>Total:</th>
-                <td>$265.24</td>
+                <td>Rp {{ number_format($invoice->invoice_total, 2) }}</td>
               </tr>
             </table>
           </div>
