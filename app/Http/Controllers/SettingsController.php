@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use App\Models\Agent;
+use App\Models\Airwaybill;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -19,8 +20,15 @@ class SettingsController extends Controller
             "alias"=>Setting::find('company_alias'),
         ];
         $agent = Agent::find(session()->get('agent_id'));
+        $airwaybill = (session()->get('agent_type') > 0)?Airwaybill::where('agent_id', $agent->agent_id)->orderBy('created_at'):Airwaybill::orderBy('created_at');
+        $awbFinish = clone $airwaybill;
+        $awbProcess = clone $airwaybill;
+        // dd($airwaybill->where('awb_status', 1)->count());
         return view('admin/dashboard')
                 ->with("agent", $agent)
+                ->with("awball", $airwaybill->count())
+                ->with("awbfinish", $awbFinish->where('awb_status', 1)->count())
+                ->with("awbprocess", $awbProcess->where('awb_status', 0)->count())
                 ->with("setting", $setting);
     }
 

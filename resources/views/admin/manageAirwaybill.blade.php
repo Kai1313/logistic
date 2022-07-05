@@ -75,23 +75,105 @@
 @endsection
 @section('script-js')
     <script>
-    $(function () {
-        $('#airwaybill-table').DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "processing": true,
-            "serverSide": true,
-            "ajax": "{{ route('airwaybill-data') }}",
-            "columns": [
-                {data: 'awb_code', name: 'awb_code'},
-                {data: 'created_at', name: 'created_at'},
-                {data: 'description', name: 'description'},
-                {data: 'acceptance', name: 'acceptance', orderable: false, searchable: false},
-                {data: 'origin_name', name: 'origin_name'},
-                {data: 'destination_name', name: 'destination_name'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        })
-    });
+        $(function () {
+            $('#airwaybill-table').DataTable({
+                "responsive": true,
+                "autoWidth": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ route('airwaybill-data') }}",
+                "columns": [
+                    {data: 'awb_code', name: 'awb_code'},
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'description', name: 'description'},
+                    {data: 'acceptance', name: 'acceptance', orderable: false, searchable: false},
+                    {data: 'origin_name', name: 'origin_name'},
+                    {data: 'destination_name', name: 'destination_name'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            })
+
+            $(document).on("click", ".btn-void, .btn-approve", function() {
+                let ident = $(this).data('identifier')
+                let ids = $(this).data('id')
+                console.log(ident)
+                switch (ident) {
+                    case 'btn-approve':
+                        approveAirwaybill(ids)
+                        break;
+                    default:
+                        voidAirwaybill(ids)
+                        break;
+                }
+            })
+        });
+
+        function approveAirwaybill(ids) {
+            $.ajax({
+                url: "{{ route('airwaybill-approve') }}",
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}', ids: ids},
+                success: function (data) {
+                    if (data.result) {
+                        $('#airwaybill-table').DataTable().ajax.reload()
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Oooopsss!',
+                        'Something goes wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
+
+        function voidAirwaybill(ids) {
+            $.ajax({
+                url: "{{ route('airwaybill-void') }}",
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}', ids: ids},
+                success: function (data) {
+                    if (data.result) {
+                        $('#airwaybill-table').DataTable().ajax.reload()
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Oooopsss!',
+                        'Something goes wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
     </script>
 @endsection

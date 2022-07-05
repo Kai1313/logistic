@@ -49,6 +49,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/create', [AirwaybillController::class, 'create'])->name('create-airwaybill');
         Route::post('/store', [AirwaybillController::class, 'store'])->name('store-airwaybill');
         Route::get('/print/{ids}', [AirwaybillController::class, 'print'])->name('print-airwaybill');
+        Route::post('/airwaybill-approve', [AirwaybillController::class, 'approveAirwaybill'])->name('airwaybill-approve');
+        Route::post('/airwaybill-void', [AirwaybillController::class, 'voidAirwaybill'])->name('airwaybill-void');
     }
 );
 

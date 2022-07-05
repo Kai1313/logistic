@@ -87,7 +87,7 @@ class AirwaybillController extends Controller
             $airwaybill->destination_name = $request->destinationName;
             $airwaybill->destination_contact = $request->destinationContact;
             $airwaybill->destination_description = $request->destinationDescription;
-            $airwaybill->awb_status = 1;
+            $airwaybill->awb_status = 0;
             $airwaybill->created_by = session()->get('user_id');
             $airwaybill->awb_code = $this->generateUniqueCode();
             $codes = $airwaybill->awb_id;
@@ -213,8 +213,10 @@ class AirwaybillController extends Controller
                         })
                         ->addColumn('action', function($row){
                             $check = Invoice::where('awb_id', $row["awb_id"])->first();
-                            $btn = '<a href="print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Print</a>';
-                            $btn .= (is_null($check))?'<button type="button" class="btn btn-sm btn-success mr-1" target="__blank" disabled><i class="fas fa-print"></i> Invoice</button>':'<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
+                            $btn = '<a href="print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1 mb-1" target="__blank"><i class="fas fa-print"></i> Print</a>';
+                            $btn .= (is_null($check))?'<button type="button" class="btn btn-sm btn-success mr-1 mb-1" target="__blank" disabled><i class="fas fa-print"></i> Invoice</button>':'<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1 mb-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
+                            $btn .= '<button type="button" data-id="'.$row["awb_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve" '.(($row["awb_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Finish</button>';
+                            $btn .= '<button type="button" data-id="'.$row["awb_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void" '.(($row["awb_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Void</button>';
                             return $btn;
                         })
                         ->rawColumns(['acceptance', 'action'])
@@ -247,5 +249,44 @@ class AirwaybillController extends Controller
                 ->with('awb', $awb)
                 ->with('pricelist', $pricelist)
                 ->with('logo', $logo->setting_value);
+    }
+
+    public function approveAirwaybill(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $airwaybill = Airwaybill::find($request->ids);
+            $airwaybill->awb_status = 1;
+            $airwaybill->updated_by = session()->get('user_id');
+            if (!$airwaybill->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to finish airwaybill data", "exception"=>'at update airwaybill status']);
+            }
+
+            DB::commit();
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to finish airwaybill data"]);
+        }
+        catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(["result"=>FALSE, "message"=>"Failed to finish airwaybill data", "exception"=>$e]);
+        }
+    }
+
+    public function voidAirwaybill(Request $request)
+    {
+        try {
+            $airwaybill = Airwaybill::find($request->ids);
+            $airwaybill->awb_status = 2;
+            $airwaybill->updated_by = session()->get('user_id');
+            if (!$airwaybill->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to void airwaybill data", "exception"=>'at update airwaybill status']);
+            }
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to void airwaybill data"]);
+        }
+        catch (\Exception $e) {
+            \Log::info($e);
+            return response()->json(["result"=>FALSE, "message"=>"Failed to void airwaybill data", "exception"=>$e]);
+        }
     }
 }

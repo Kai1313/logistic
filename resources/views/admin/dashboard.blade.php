@@ -41,7 +41,7 @@
                   <span class="info-box-icon bg-primary elevation-1"><i class="far fa-file-alt"></i></span>
                   <div class="info-box-content">
                     <span class="info-box-text">Airwaybills</span>
-                    <span class="info-box-number">760</span>
+                    <span class="info-box-number">{{ $awball }}</span>
                   </div>
                 </div>
               </div>
@@ -51,7 +51,7 @@
                   <span class="info-box-icon bg-warning elevation-1"><i class="far fa-file-alt"></i></span>
                   <div class="info-box-content">
                     <span class="info-box-text">On-Process</span>
-                    <span class="info-box-number">760</span>
+                    <span class="info-box-number">{{ $awbprocess }}</span>
                   </div>
                 </div>
               </div>
@@ -61,7 +61,7 @@
                   <span class="info-box-icon bg-success elevation-1"><i class="far fa-file-alt"></i></span>
                   <div class="info-box-content">
                     <span class="info-box-text">Finished</span>
-                    <span class="info-box-number">760</span>
+                    <span class="info-box-number">{{ $awbfinish }}</span>
                   </div>
                 </div>
               </div>
