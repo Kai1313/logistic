@@ -212,8 +212,9 @@ class AirwaybillController extends Controller
                             return $acp;
                         })
                         ->addColumn('action', function($row){
+                            $check = Invoice::where('awb_id', $row["awb_id"])->first();
                             $btn = '<a href="print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Print</a>';
-                            $btn .= '<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
+                            $btn .= (is_null($check))?'<button type="button" class="btn btn-sm btn-success mr-1" target="__blank" disabled><i class="fas fa-print"></i> Invoice</button>':'<a href="'.url('').'/admin/invoice/print/'.$row["awb_id"].'" class="btn btn-sm btn-success mr-1" target="__blank"><i class="fas fa-print"></i> Invoice</a>';
                             return $btn;
                         })
                         ->rawColumns(['acceptance', 'action'])

@@ -67,7 +67,25 @@
                 <td>1</td>
                 <td>{{ $airwaybill->awb_code }}</td>
                 <td>{{ $invoice->invoice_information }}</td>
-                <td>Rp {{ $airwaybill->awb_total_cost }}</td>
+                <td>Rp {{ $invoice->invoice_amount }}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
             </tbody>
           </table>

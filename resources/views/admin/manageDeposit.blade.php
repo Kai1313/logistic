@@ -84,7 +84,7 @@
                 "ajax": "{{ route('deposit-data') }}",
                 "columns": [
                     {data: 'deposit_code', name: 'deposit_code'},
-                    {data: 'agent_id', id: 'agent_id'},
+                    {data: 'agent_name', name: 'agents.agent_name'},
                     {data: 'deposit_amount', name: 'deposit_amount'},
                     {data: 'deposit_proof', name: 'deposit_proof'},
                     {data: 'deposit_note', name: 'deposit_note'},
