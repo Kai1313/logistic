@@ -146,6 +146,7 @@
             let myForm = document.getElementById('import-form')
             let formData = new FormData(myForm)
             console.log(formData)
+            $("#btn-import").html('<i class="fas fa-spinner fa spin"> processing...</i>')
             $.ajax({
                 url: "{{ route('import-pricelist') }}",
                 data: formData,
@@ -156,6 +157,8 @@
                 success: function(data) {
                     console.log('success')
                     if (data.result) {
+                        $("#btn-import").html('Submit')
+                        $("#pricelist-table").DataTable().ajax.reload()
                         Swal.fire({
                             title: 'Success!',
                             text: data.message,

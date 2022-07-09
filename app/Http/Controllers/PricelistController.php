@@ -93,6 +93,16 @@ class PricelistController extends Controller
         }
     }
 
+    public function generateUniqueCode()
+    {
+        $get = Setting::find('company_code');
+        $companyCode = ($get->setting_value == '')?'PRC':$get->setting_value;
+        do {
+            $code = $companyCode.date('ymd').random_int(100000, 999999);
+        } while (Pricelist::where("pricelist_code", $code)->first());
+        return $code;
+    }
+
     /**
      * Display the specified resource.
      *
@@ -229,9 +239,6 @@ class PricelistController extends Controller
 
     public function import(Request $request)
     {
-        // dd($request->all());
-        // dd(Excel::toCollection(new PricelistImport, $request->file('imported')));
-        // return response()->json(["result"=>TRUE, "message"=>"Successfully importing pricelist data"]);
         try {
             $importeds = Excel::toCollection(new PricelistImport, $request->file('imported'));
             // dd($importeds[0][0]["code"]);
@@ -240,7 +247,7 @@ class PricelistController extends Controller
                 // dd($imported['code']);
                 $pricelist = new Pricelist;
                 $pricelist->pricelist_id = Str::uuid();
-                $pricelist->pricelist_code = ($imported["code"] != null)?$imported["code"]:'JEX'.$key;
+                $pricelist->pricelist_code = ($imported["code"] != null)?$imported["code"]:$this->generateUniqueCode();
                 $pricelist->pricelist_note = $imported["note"];
                 $pricelist->pricelist_type = ($imported["type"] != null)?$imported["type"]:'REG';
                 $pricelist->province = $imported["province"];
