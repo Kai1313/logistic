@@ -25,6 +25,7 @@ return new class extends Migration
             $table->char('pricelist_type', 36);
             $table->string('pricelist_destination_type', 128)->nullable();
             $table->decimal('pricelist_price', $precision = 10, $scale = 2)->default(0);
+            $table->decimal('pricelist_price_cargo', $precision = 10, $scale = 2)->default(0);
             $table->decimal('pricelist_price_volume', $precision = 10, $scale = 2)->default(0);
             $table->decimal('pricelist_minimum_weight', $precision = 10, $scale = 2)->default(1);
             $table->decimal('pricelist_minimum_volume', $precision = 10, $scale = 2)->default(1);

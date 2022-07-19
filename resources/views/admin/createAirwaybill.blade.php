@@ -178,6 +178,7 @@
                                         <div class="form-group">
                                             <input type="hidden" name="pricelist" id="pricelist" value="0">
                                             <input type="hidden" name="hiddenPricelist" id="hiddenPricelist" value="0">
+                                            <input type="hidden" name="hiddenPricelistCargo" id="hiddenPricelistCargo" value="0">
                                             <input type="hidden" name="hiddenSpecialPricelist" id="hiddenSpecialPricelist" value="0">
                                             <input type="hidden" name="hiddenMinimumWeight" id="hiddenMinimumWeight" value="0">
                                             <input type="hidden" name="hiddenSubCost" id="hiddenSubCost" value="0">
@@ -639,13 +640,14 @@
         let insurance = ($("#insurance").val() == "") ? parseFloat(0) : parseFloat($("#insurance").val())
         let additional = ($("#additional").val() == "") ? parseFloat(0) : parseFloat($("#additional").val())
         let pricelist = ($("#pricelist").val() == "") ? parseFloat(0) : parseFloat($("#hiddenPricelist").val())
+        let pricelistCargo = ($("#pricelist").val() == "") ? parseFloat(0) : parseFloat($("#hiddenPricelistCargo").val())
         let discount = ($("#discount").val() == "") ? parseFloat(0) : parseFloat($("#discount").val())
 
         // Check weighing type
         switch (weightType) {
             case '1':
                 let finWeight = (minWeight > weight) ? minWeight : weight
-                let minPrice = finWeight*pricelist
+                let minPrice = minWeight*pricelistCargo
                 vol = length*width*height
                 volume = parseFloat(vol/4000)
                 round = rounding(volume)
@@ -655,7 +657,7 @@
                 $("#hiddenTotalCost").val(sum)
                 $("#showWeight").text((volume > finWeight)?round+'kg':finWeight+'kg')
                 $("#showMinimumWeight").html(minWeight+'kg')
-                $("#showCost").text('Rp'+pricelist)
+                $("#showCost").text('Rp'+(minWeight*pricelistCargo))
                 $("#showPackageCost").text('Rp'+pckage)
                 break;
             case '2':
@@ -711,11 +713,13 @@
             data: {_token: "{{ csrf_token() }}", ids: ids},
             success: function (data) {
                 let price = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price"]) : parseFloat(0)
+                let cargoPrice = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price_cargo"]) : parseFloat(0)
                 let specialPrice = (data.pricelist != null) ? parseFloat(data.pricelist["pricelist_price_volume"]): parseFloat(0)
                 let minWeight = parseFloat(data.pricelist["pricelist_minimum_weight"])
                 $("#pricelistShow").val(data.pricelist["pricelist_destination"])
                 $("#pricelist").val(data.pricelist["pricelist_id"])
                 $("#hiddenPricelist").val(price)
+                $("#hiddenPricelistCargo").val(cargoPrice)
                 $("#hiddenSpecialPricelist").val(specialPrice)
                 $("#hiddenMinimumWeight").val(minWeight)
 
