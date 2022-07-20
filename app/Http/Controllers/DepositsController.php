@@ -128,7 +128,7 @@ class DepositsController extends Controller
     public function depositData(Request $request)
     {
         if (session()->get('agent_type') < 0) {
-            $deposit = Deposit::select('deposits.deposit_code', 'agents.agent_name', 'deposits.deposit_proof', 'deposits.deposit_amount', 'deposits.deposit_note')
+            $deposit = Deposit::select('deposits.deposit_id', 'deposits.deposit_code', 'agents.agent_name', 'deposits.deposit_proof', 'deposits.deposit_amount', 'deposits.deposit_note')
                         ->orderBy('deposit_code')
                         ->join('agents', 'agents.agent_id', 'deposits.agent_id');
             $deposit = DataTables::of($deposit)

@@ -72,12 +72,14 @@ class AirwaybillController extends Controller
             $airwaybill->awb_height = $request->height;
             $airwaybill->awb_volume = (float)($request->length*$request->width*$request->height);
             $airwaybill->awb_packaging = $request->packaging;
-            $airwaybill->awb_cost = (float)($request->weight*$request->hiddenPricelist);
+            //$airwaybill->awb_cost = (float)($request->weight*$request->hiddenPricelist);
+          	$airwaybill->awb_cost = (float) $request->hiddenSubCost;
             $airwaybill->awb_packaging_cost = $request->packagingCost;
             $airwaybill->awb_additional_cost = $request->additional;
             $airwaybill->awb_insurance_cost = $request->insurance;
             $airwaybill->awb_discount = $request->discount;
-            $airwaybill->awb_total_cost = (float)($request->weight*$request->hiddenPricelist+($request->packagingCost+$request->insurance+$request->additional-$request->discount));
+            //$airwaybill->awb_total_cost = (float)($request->weight*$request->hiddenPricelist+($request->packagingCost+$request->insurance+$request->additional-$request->discount));
+          	$airwaybill->awb_total_cost = (float) $request->hiddenTotalCost;
             $airwaybill->origin_name = $request->originName;
             $airwaybill->origin_contact = $request->originContact;
             $airwaybill->origin_description = $request->originDescription;
