@@ -22,7 +22,7 @@ use App\Http\Controllers\SettingsController;
 |
 */
 Route::get('/', function() {
-    return view('main/index');
+    return view('mtl/master');
 });
 
 Route::get('/dash', [SettingsController::class, 'index'])->middleware(['auth'])->name('homes');

@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Transportation HTML-5 Template </title>
+    <title>MTL Express </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/theme/img/favicon.ico') }}">
 
     <!-- CSS here -->
-    @include('main.layouts.maincss')
+    @include('mtl.layouts.maincss')
     @yield('addoncss')
     <link rel="stylesheet" href="{{ asset('assets/theme/css/style.css') }}">
     @yield('addonscriptcss')
@@ -31,9 +31,9 @@
 </head>
 <body>
 <!--? Preloader Start -->
-@include('main.layouts.preloader')
+@include('mtl.layouts.preloader')
 <!-- Preloader Start -->
-@include('main.layouts.header')
+@include('mtl.layouts.header')
 <main>
     <!--? slider Area Start-->
     <div class="slider-area ">
@@ -77,7 +77,7 @@
                         </div>
                         <div class="info-caption">
                             <p>Call Us Anytime</p>
-                            <span>+62 852-3615-2999</span>
+                            <span>0853-3514-9955</span>
                         </div>
                     </div>
                 </div>
@@ -98,8 +98,8 @@
                             <span class="flaticon-place"></span>
                         </div>
                         <div class="info-caption">
-                            <p>Columbia, SC 29201</p>
-                            <span>USA, New York - 10620</span>
+                            <p>JL. Sidosermo VI No. 67</p>
+                            <span>Surabaya</span>
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
                         <!-- Section Tittle -->
                         <div class="section-tittle mb-35">
                             <span>About Our Company</span>
-                            <h2>Safe Logistic & Transport  Solutions That Saves our Valuable Time!</h2>
+                            <h2> MTL Express Logistic & Transport  Solutions That Saves our Valuable Time!</h2>
                         </div>
                         <p>Brook presents your services with flexible, convenient and cdpose layouts. You can select your favorite layouts & elements for cular ts with unlimited ustomization possibilities. Pixel-perfect replication of the designers is intended.</p>
                         <p>Brook presents your services with flexible, convefnient and chient anipurpose layouts. You can select your favorite layouts.</p>
@@ -303,7 +303,7 @@
     </section>
     <!-- contact-form end -->
     <!--Team Ara Start -->
-    <div class="team-area section-padding30">
+    {{-- <div class="team-area section-padding30">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="cl-xl-7 col-lg-8 col-md-10">
@@ -377,10 +377,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Team Ara End -->
     <!--? Testimonial Start -->
-    <div class="testimonial-area testimonial-padding section-bg" data-background="{{ asset('assets/theme/img/gallery/section_bg04.jpg') }}">
+    {{-- <div class="testimonial-area testimonial-padding section-bg" data-background="{{ asset('assets/theme/img/gallery/section_bg04.jpg') }}">
         <div class="container">
             <div class="row justify-content-between">
                 <div class="col-xl-7 col-lg-7">
@@ -441,10 +441,10 @@
                 <!-- Form End -->
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Testimonial End -->
     <!--? Blog Area Start -->
-    <div class="home-blog-area section-padding30">
+    {{-- <div class="home-blog-area section-padding30">
         <div class="container">
             <!-- Section Tittle -->
             <div class="row">
@@ -524,7 +524,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Blog Area End -->
 </main>
 <footer>
@@ -541,7 +541,7 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-4">
-                            <span class="contact-number f-right">+62 852-3615-2999</span>
+                            <span class="contact-number f-right">0853-3514-9955</span>
                         </div>
                     </div>
                 </div>
@@ -593,11 +593,11 @@
                             <div class="footer-logo">
                                 <a href="index.html"><img src="{{ asset('assets/theme/img/logo/mtl-logo.png') }}" alt="" style="max-height: 39px;"></a>
                             </div>
-                            <div class="footer-tittle">
+                            {{-- <div class="footer-tittle">
                                 <div class="footer-pera">
                                     <p class="info1">GThe trade war currently ensuing between te US anfd several natxions around thdhe globe, most fiercely with.</p>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- Footer Social -->
                             <div class="footer-social ">
                                 <a href="https://www.facebook.com/sai4ull"><i class="fab fa-facebook-f"></i></a>
@@ -631,7 +631,7 @@
 </div>
 
     <!-- JS here -->
-    @include('main.layouts.mainjs')
+    @include('mtl.layouts.mainjs')
     @yield('addonjs')
     <!-- Jquery Plugins, main Jquery -->	
     <script src="{{ asset('assets/theme/js/plugins.js') }}"></script>

@@ -8,7 +8,7 @@
                         <div class="row d-flex justify-content-between align-items-center">
                             <div class="header-info-left">
                                 <ul>     
-                                    <li>Phone: +62 852-3615-2999</li>
+                                    <li>Phone: 0853-3514-9955</li>
                                     <li>Email: help@mtlexpress.id</li>
                                 </ul>
                             </div>
@@ -39,8 +39,8 @@
                                 <div class="main-menu d-none d-lg-block">
                                     <nav> 
                                         <ul id="navigation">                                           
-                                            <li><a href="index.html">Home</a></li>
-                                            <li><a href="about.html">About</a></li>
+                                            <li><a href="#">Home</a></li>
+                                            {{-- <li><a href="about.html">About</a></li>
                                             <li><a href="services.html">Services</a></li>
                                             <li><a href="blog.html">Blog</a>
                                                 <ul class="submenu">
@@ -49,7 +49,7 @@
                                                     <li><a href="elements.html">Element</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="contact.html">Contact</a></li> --}}
                                         </ul>
                                     </nav>
                                 </div>
