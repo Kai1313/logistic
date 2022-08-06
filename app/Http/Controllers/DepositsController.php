@@ -128,7 +128,7 @@ class DepositsController extends Controller
     public function depositData(Request $request)
     {
         if (session()->get('agent_type') < 0) {
-            $deposit = Deposit::select('deposits.deposit_id', 'deposits.deposit_code', 'agents.agent_name', 'deposits.deposit_proof', 'deposits.deposit_amount', 'deposits.deposit_note')
+            $deposit = Deposit::select('deposits.deposit_id', 'deposits.deposit_code', 'agents.agent_name', 'deposits.deposit_proof', 'deposits.deposit_amount', 'deposits.deposit_note', 'deposits.deposit_status')
                         ->orderBy('deposit_code')
                         ->join('agents', 'agents.agent_id', 'deposits.agent_id');
             $deposit = DataTables::of($deposit)
@@ -150,6 +150,9 @@ class DepositsController extends Controller
                             if (session()->get('agent_type') < 0) {
                                 $btn = '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-approve" class="btn btn-sm btn-success mr-1 mb-1 btn-approve" '.(($row["deposit_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Approve</button>';
                                 $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-void" class="btn btn-sm btn-warning mr-1 mb-1 btn-void" '.(($row["deposit_status"] > 0)?'disabled':'').'><i class="fas fa-edit"></i>Void</button>';
+                                if ($row["deposit_status"] == 1) {
+                                    $btn .= '<button type="button" data-id="'.$row["deposit_id"].'" data-identifier="btn-cancel" class="btn btn-sm btn-danger mr-1 mb-1 btn-cancel" '.(($row["deposit_status"] != 1)?'disabled':'').'><i class="fas fa-trash"></i>Cancel</button>';
+                                }
                             }
                             else {
                                 $btn = '<a href="'.$row["deposit_id"].'" class="btn btn-sm btn-info mr-1 mb-1 btn-void"><i class="fas fa-edit"></i>Check</a>';
@@ -237,6 +240,35 @@ class DepositsController extends Controller
         catch (\Exception $e) {
             \Log::info($e);
             return response()->json(["result"=>FALSE, "message"=>"Failed to void deposit data", "exception"=>$e]);
+        }
+    }
+
+    public function cancelDeposit(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $deposit = Deposit::find($request->ids);
+            $deposit->deposit_status = 2;
+            $depoAmount = $deposit->deposit_amount;
+            $deposit->modified_by = session()->get('user_id');
+            if (!$deposit->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to cancel deposit data", "exception"=>'at update deposit status']);
+            }
+            $agent = Agent::find($deposit->agent_id);
+            $depoBefore = $agent->agent_deposit;
+            $agent->agent_deposit = $depoBefore - $depoAmount;
+            if (!$agent->save()) {
+                DB::rollback();
+                return response()->json(["result"=>FALSE, "message"=>"Failed to cancel deposit data", "exception"=>'at update agent deposit']);
+            }
+            DB::commit();
+            return response()->json(["result"=>TRUE, "message"=>"Successfully to cancel deposit data"]);
+        }
+        catch (\Exception $e) {
+            \Log::info($e);
+            DB::rollback();
+            return response()->json(["result"=>FALSE, "message"=>"Failed to cancel deposit data", "exception"=>$e]);
         }
     }
 }

@@ -42,6 +42,7 @@
                                         <tr>
                                             <th>Code</th>
                                             <th>Name</th>
+                                            <th>Deposit</th>
                                             <th>Address</th>
                                             <th>Contact</th>
                                             <th>Email</th>
@@ -98,6 +99,7 @@
             "columns": [
                 {data: 'agent_code', name: 'agent_code'},
                 {data: 'agent_name', name: 'agent_name'},
+                {data: 'agent_deposit', name: 'agent_deposit'},
                 {data: 'agent_address', name: 'agent_address'},
                 {data: 'agent_phone', name: 'agent_phone'},
                 {data: 'agent_email', name: 'agent_email'},

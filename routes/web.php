@@ -79,6 +79,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/store', [DepositsController::class, 'store'])->name('store-deposit');
         Route::post('/deposit-approve', [DepositsController::class, 'approveDeposit'])->name('deposit-approve');
         Route::post('/deposit-void', [DepositsController::class, 'voidDeposit'])->name('deposit-void');
+        Route::post('/deposit-cancel', [DepositsController::class, 'cancelDeposit'])->name('deposit-cancel');
     });
 
     Route::prefix('invoice')->group(function () {

@@ -94,13 +94,16 @@
                 ]
             })
 
-            $(document).on("click", ".btn-void, .btn-approve", function() {
+            $(document).on("click", ".btn-void, .btn-approve, .btn-cancel", function() {
                 let ident = $(this).data('identifier')
                 let ids = $(this).data('id')
                 console.log(ident)
                 switch (ident) {
                     case 'btn-approve':
                         approveDeposit(ids)
+                        break;
+                    case 'btn-cancel':
+                        cancelDeposit(ids)
                         break;
                 
                     default:
@@ -169,6 +172,40 @@
                     }
                 },
                 error: function() {
+                Swal.fire(
+                        'Oooopsss!',
+                        'Something goes wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
+
+        function cancelDeposit(ids) {
+            $.ajax({
+                url: "{{ route('deposit-cancel') }}",
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}', ids: ids},
+                success: function (data) {
+                    if (data.result) {
+                        $('#deposit-table').DataTable().ajax.reload()
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                },
+                error: function() {
                     Swal.fire(
                         'Oooopsss!',
                         'Something goes wrong!',
@@ -177,5 +214,5 @@
                 }
             })
         }
-    </script>
+        </script>
 @endsection
