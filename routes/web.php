@@ -51,6 +51,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/print/{ids}', [AirwaybillController::class, 'print'])->name('print-airwaybill');
         Route::post('/airwaybill-approve', [AirwaybillController::class, 'approveAirwaybill'])->name('airwaybill-approve');
         Route::post('/airwaybill-void', [AirwaybillController::class, 'voidAirwaybill'])->name('airwaybill-void');
+        Route::get('/airwaybill-export', [AirwaybillController::class, 'exportExcel'])->name('airwaybill-export');
     }
 );
 

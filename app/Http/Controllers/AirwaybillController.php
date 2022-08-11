@@ -9,10 +9,12 @@ use App\Models\Agent;
 use App\Models\Invoice;
 use App\Models\Subscribe;
 use App\Models\Setting;
+use App\Exports\AirwaybillExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
 use DB;
+use Excel;
 
 class AirwaybillController extends Controller
 {
@@ -290,5 +292,10 @@ class AirwaybillController extends Controller
             \Log::info($e);
             return response()->json(["result"=>FALSE, "message"=>"Failed to void airwaybill data", "exception"=>$e]);
         }
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new AirwaybillExport, 'exported-airwaybill.xlsx');
     }
 }
