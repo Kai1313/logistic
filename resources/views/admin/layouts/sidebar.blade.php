@@ -202,6 +202,14 @@
             </a>
           </li>
           @endif
+          <li class="nav-item">
+            <a href="{{ route('manage-report') }}" class="nav-link {{ request()->is('admin/report/*') ? 'active' : '' }}">
+              <i class="nav-icon far fa-file-alt"></i>
+              <p>
+                Manage Report
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

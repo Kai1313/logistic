@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepositsController;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,9 +83,14 @@ Route::prefix('admin')->group(function () {
         Route::post('/deposit-void', [DepositsController::class, 'voidDeposit'])->name('deposit-void');
         Route::post('/deposit-cancel', [DepositsController::class, 'cancelDeposit'])->name('deposit-cancel');
     });
-
+    
     Route::prefix('invoice')->group(function () {
         Route::get('/print/{id}', [InvoicesController::class, 'show'])->name('invoice-print');
+    });
+
+    Route::prefix('report')->group(function () {
+        Route::get('/manage-report', [ReportsController::class, 'index'])->name('manage-report');
+        Route::post('/fetch-report', [ReportsController::class, 'fetchReport'])->name('fetch-report');
     });
 });
 
