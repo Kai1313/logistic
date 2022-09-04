@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Agent;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\Exports\AirwaybillExport;
+use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
 use DB;
+use Log;
 
 class ReportsController extends Controller
 {
@@ -93,10 +96,32 @@ class ReportsController extends Controller
     public function fetchReport(Request $request)
     {
         try {
+            // dd($request->all());
+            // return Excel::download(new AirwaybillExport, 'report-airwaybills.xlsx');
+            
+            return view('admin/reportAirwaybills');
+        } 
+        catch (\Exception $e) {
+            Log::info($e);
+        }
+    }
+
+    public function reportData(Request $request)
+    {
+        try {
             dd($request->all());
         } 
         catch (\Exception $e) {
             Log::info($e);
         }
+        // $airwaybill = Agent::orderBy('agent_code');
+        // $agent = DataTables::of($agent)
+        //             ->addColumn('action', function($row){
+        //                 $btn = '<a href="edit/'.$row["agent_id"].'" class="btn btn-sm btn-success mr-1"><i class="fas fa-edit"></i> Edit</a>';
+        //                 return $btn;
+        //             })
+        //             ->rawColumns(['action'])
+        //             ->make(true);
+        // return $agent;
     }
 }

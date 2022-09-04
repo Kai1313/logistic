@@ -87,10 +87,11 @@ Route::prefix('admin')->group(function () {
     Route::prefix('invoice')->group(function () {
         Route::get('/print/{id}', [InvoicesController::class, 'show'])->name('invoice-print');
     });
-
+    
     Route::prefix('report')->group(function () {
         Route::get('/manage-report', [ReportsController::class, 'index'])->name('manage-report');
         Route::post('/fetch-report', [ReportsController::class, 'fetchReport'])->name('fetch-report');
+        Route::get('/report-data', [ReportsController::class, 'reportData'])->name('report-data');
     });
 });
 
