@@ -101,7 +101,9 @@ class ReportsController extends Controller
             // return Excel::download(new AirwaybillExport, 'report-airwaybills.xlsx');
             $airwaybills = Airwaybill::select('airwaybills.awb_code', 'airwaybills.created_at', 'airwaybills.awb_status', 'agents.agent_name', 'pricelists.pricelist_code', 'airwaybills.payment_method', 'airwaybills.acceptance_method', 'airwaybills.awb_weight', 'airwaybills.awb_volume', 'airwaybills.awb_cost', 'airwaybills.awb_packaging_cost', 'airwaybills.awb_additional_cost', 'airwaybills.awb_insurance_cost', 'airwaybills.awb_discount', 'airwaybills.awb_total_cost')
             ->join('agents', 'agents.agent_id', 'airwaybills.agent_id')
-            ->join('pricelists', 'pricelists.pricelist_id', 'airwaybills.pricelist_id');
+            ->join('pricelists', 'pricelists.pricelist_id', 'airwaybills.pricelist_id')
+            ->where('airwaybills.created_at', '>=', $request->startDate)
+            ->where('airwaybills.created_at', '<=', $request->endDate);
             if (session()->get('agent_type') < 0) {
                 $data = $airwaybills->get();
             }
