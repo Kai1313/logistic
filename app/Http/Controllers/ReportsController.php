@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Setting;
+use App\Models\Airwaybill;
 use Illuminate\Http\Request;
 use App\Exports\AirwaybillExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -98,8 +99,17 @@ class ReportsController extends Controller
         try {
             // dd($request->all());
             // return Excel::download(new AirwaybillExport, 'report-airwaybills.xlsx');
-            
-            return view('admin/reportAirwaybills');
+            $airwaybills = Airwaybill::select('airwaybills.awb_code', 'airwaybills.created_at', 'airwaybills.awb_status', 'agents.agent_name', 'pricelists.pricelist_code', 'airwaybills.payment_method', 'airwaybills.acceptance_method', 'airwaybills.awb_weight', 'airwaybills.awb_volume', 'airwaybills.awb_cost', 'airwaybills.awb_packaging_cost', 'airwaybills.awb_additional_cost', 'airwaybills.awb_insurance_cost', 'airwaybills.awb_discount', 'airwaybills.awb_total_cost')
+            ->join('agents', 'agents.agent_id', 'airwaybills.agent_id')
+            ->join('pricelists', 'pricelists.pricelist_id', 'airwaybills.pricelist_id');
+            if (session()->get('agent_type') < 0) {
+                $data = $airwaybills->get();
+            }
+            else {
+                $data = $airwaybills->where('airwaybills.agent_id', session()->get('agent_id'))->get();
+            }
+            return view('admin/reportAirwaybills')
+                ->with('data', $data);
         } 
         catch (\Exception $e) {
             Log::info($e);
